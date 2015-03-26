@@ -46,23 +46,27 @@
 
 			half4 frag (v2f input) : COLOR
 			{	
-				float2 fixedUV = float2(input.uv.x,  input.uv.y);
 				half4 originalPixel = tex2D(_MainTex, input.uv);
-				half4 outlineSource = tex2D(_OutlineSource, fixedUV);
-				
-			    float _OutLineSpreadX  = _LineThicknessX;
-				float _OutLineSpreadY = _LineThicknessY;
-
-				half4 outline = 0;
+				half4 outlineSource = tex2D(_OutlineSource, input.uv);
+								
 				float h = .95f;
-				if(outlineSource.b > h 
-					&& (tex2D(_OutlineSource, fixedUV + float2(_OutLineSpreadX,0.0)).b < h
-					|| tex2D(_OutlineSource, fixedUV + float2(-_OutLineSpreadX,0.0)).b < h
-					|| tex2D(_OutlineSource, fixedUV + float2(.0,_OutLineSpreadY)).b < h
-					|| tex2D(_OutlineSource, fixedUV + float2(.0,-_OutLineSpreadY)).b < h))
+				half4 outline = 0;
+
+				float3 sample1 = tex2D(_OutlineSource, input.uv + float2(_LineThicknessX,0.0)).rgb;
+				float3 sample2 = tex2D(_OutlineSource, input.uv + float2(-_LineThicknessX,0.0)).rgb;
+				float3 sample3 = tex2D(_OutlineSource, input.uv + float2(.0,_LineThicknessY)).rgb;
+				float3 sample4 = tex2D(_OutlineSource, input.uv + float2(.0,-_LineThicknessY)).rgb;
+				
+				if(outlineSource.b > h && (
+					   sample1.b < h
+					|| sample2.b < h
+					|| sample3.b < h
+					|| sample4.b < h
+					))
 					outline = _LineIntensity;
 								
 				return originalPixel + outline * _LineColor;
+				//return outlineSource;
 			}
 			
 			ENDCG
