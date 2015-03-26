@@ -2,6 +2,8 @@ Outline Effect
 ======================
 Outline Image Effect for Unity
 
+![](http://i.imgur.com/yAKd5Qg.png "Optional title")
+
 INSTALLATION:
 ------------
 Download the files and place the "OutlineEffect" folder in your Assets folder
