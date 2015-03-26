@@ -15,7 +15,7 @@ Erase option to keep outlines behind specific sprite/line renderers
 
 INSTALLATION:
 ------------
-Download the files and place the "OutlineEffect" folder in your Assets folder
+Download the files and open the project OR place the "Assets/OutlineEffect" folder in your Assets folder
 
 USAGE:
 ------------
