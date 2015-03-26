@@ -4,6 +4,12 @@ Outline Image Effect for Unity
 
 ![](http://i.imgur.com/yAKd5Qg.png "Optional title")
 
+FEATURES:
+------------
+Merged outline between multiple sprite/line renderers
+Erase option to keep outlines behind specific sprite/line renderers
+[LATER] Per sprite/line renderer color/intensity support
+
 INSTALLATION:
 ------------
 Download the files and place the "OutlineEffect" folder in your Assets folder
