@@ -28,3 +28,7 @@ Add Renderer objects to "Outline Renderers" in the script OR replace the list fr
 NOTE:
 ------------
 I do not own the Half Life sprite and it's used for demonstration purposes only under fair use.
+
+TWITTER:
+------------
+[cakeslice_dev](https://twitter.com/cakeslice_dev)
