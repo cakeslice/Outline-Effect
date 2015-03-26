@@ -7,8 +7,11 @@ Outline Image Effect for Unity
 FEATURES:
 ------------
 Merged outline between multiple sprite/line renderers
+
 Erase option to keep outlines behind specific sprite/line renderers
+
 [LATER] Per sprite/line renderer color/intensity support
+
 
 INSTALLATION:
 ------------
