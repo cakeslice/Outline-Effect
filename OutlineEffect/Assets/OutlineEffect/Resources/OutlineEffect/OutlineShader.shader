@@ -66,7 +66,9 @@ Shader "Hidden/OutlineEffect"
 			float _LineThicknessX;
 			float _LineThicknessY;
 			float _LineIntensity;
-			half4 _LineColor;
+			half4 _LineColor1;
+			half4 _LineColor2;
+			half4 _LineColor3;
 
 			half4 frag (v2f input) : COLOR
 			{	
@@ -76,21 +78,23 @@ Shader "Hidden/OutlineEffect"
 				float h = .95f;
 				half4 outline = 0;
 
-				float3 sample1 = tex2D(_OutlineSource, input.uv + float2(_LineThicknessX,0.0)).rgb;
-				float3 sample2 = tex2D(_OutlineSource, input.uv + float2(-_LineThicknessX,0.0)).rgb;
-				float3 sample3 = tex2D(_OutlineSource, input.uv + float2(.0,_LineThicknessY)).rgb;
-				float3 sample4 = tex2D(_OutlineSource, input.uv + float2(.0,-_LineThicknessY)).rgb;
+				half4 sample1 = tex2D(_OutlineSource, input.uv + float2(_LineThicknessX,0.0));
+				half4 sample2 = tex2D(_OutlineSource, input.uv + float2(-_LineThicknessX,0.0));
+				half4 sample3 = tex2D(_OutlineSource, input.uv + float2(.0,_LineThicknessY));
+				half4 sample4 = tex2D(_OutlineSource, input.uv + float2(.0,-_LineThicknessY));
 				
-				if(outlineSource.b > h && (
-					   sample1.b < h
-					|| sample2.b < h
-					|| sample3.b < h
-					|| sample4.b < h
-					))
-					outline = _LineIntensity;
-								
-				return originalPixel + outline * _LineColor;
-				//return outlineSource;
+				if(outlineSource.a < h)
+				{
+					if(sample1.r > h || sample2.r > h || sample3.r > h || sample4.r > h)
+						outline = _LineColor1 * _LineIntensity;
+					else if(sample1.g > h || sample2.g > h || sample3.g > h || sample4.g > h)
+						outline = _LineColor2 * _LineIntensity;
+					else if(sample1.b > h || sample2.b > h || sample3.b > h || sample4.b > h)
+						outline = _LineColor3 * _LineIntensity;
+				}					
+					
+				//return outlineSource;				
+				return originalPixel + outline;
 			}
 			
 			ENDCG
