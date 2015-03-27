@@ -10,7 +10,7 @@ Merged outline between multiple sprite/line renderers
 
 Erase option to keep outlines behind specific sprite/line renderers
 
-[LATER] Per sprite/line renderer color support
+Per sprite/line renderer color support
 
 
 INSTALLATION:
