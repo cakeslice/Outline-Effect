@@ -38,6 +38,7 @@ Shader "Hidden/OutlineEffect"
 			LOD 200
 			ZTest Always
 			ZWrite Off
+			Cull Off
 			
 			CGPROGRAM
 

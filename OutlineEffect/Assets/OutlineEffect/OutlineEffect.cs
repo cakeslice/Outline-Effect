@@ -45,6 +45,7 @@ public class OutlineEffect : MonoBehaviour
     private Material outline3Material;
     private Material outlineEraseMaterial;
     private Shader outlineShader;
+    private Shader outlineBufferShader;
 	private Material outlineShaderMaterial;
 	private RenderTexture renderTexture;
 	private Camera _camera;
@@ -82,12 +83,8 @@ public class OutlineEffect : MonoBehaviour
 
     Material CreateMaterial(Color emissionColor)
     {
-        Material m = new Material(Shader.Find("Standard"));
-        m.SetColor("_Color", Color.black);
-        m.SetFloat("_Glossiness", 1);
-        m.SetColor("_EmissionColor", emissionColor);
-        m.EnableKeyword("_EMISSION");
-        m.SetFloat("_Mode", 2);
+        Material m = new Material(outlineBufferShader);
+        m.SetColor("_Color", emissionColor);
         m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
         m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
         m.SetInt("_ZWrite", 0);
@@ -206,6 +203,8 @@ public class OutlineEffect : MonoBehaviour
 	{
         if(outlineShader == null)
             outlineShader = Resources.Load<Shader>("OutlineEffect/OutlineShader");
+        if (outlineBufferShader == null)
+            outlineBufferShader = Resources.Load<Shader>("OutlineEffect/OutlineBufferShader");
 		if(outlineShaderMaterial == null)
 		{
 			outlineShaderMaterial = new Material(outlineShader);
@@ -230,6 +229,7 @@ public class OutlineEffect : MonoBehaviour
         DestroyImmediate(outline2Material);
         DestroyImmediate(outline3Material);
         outlineShader = null;
+        outlineBufferShader = null;
 		outlineShaderMaterial = null;
         outlineEraseMaterial = null;
         outline1Material = null;
