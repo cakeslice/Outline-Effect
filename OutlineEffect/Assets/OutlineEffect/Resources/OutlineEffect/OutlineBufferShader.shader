@@ -72,8 +72,9 @@ Shader "Hidden/OutlineBufferEffect" {
 		void surf (Input IN, inout SurfaceOutput o)
 		{
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * IN.color;
-			o.Albedo = _Color * c.a;
-			o.Alpha = c.a;
+			float alpha = c.a * 99999999;
+			o.Albedo = _Color * alpha;
+			o.Alpha = alpha;
 		}
 		ENDCG
 	}
