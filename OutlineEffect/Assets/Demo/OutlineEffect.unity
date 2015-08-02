@@ -217,6 +217,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+  m_StereoMirrorMode: 0
 --- !u!4 &115619427
 Transform:
   m_ObjectHideFlags: 0
@@ -252,6 +253,7 @@ MonoBehaviour:
   lineColor1: {r: 1, g: 1, b: 1, a: 1}
   lineColor2: {r: 0, g: .588235319, b: 1, a: 1}
   lineColor3: {r: 1, g: .669019639, b: .172549009, a: 1}
+  flipY: 0
 --- !u!114 &115619429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,7 +428,7 @@ Transform:
   m_RootOrder: 0
 --- !u!21 &1518541379
 Material:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -435,6 +437,7 @@ Material:
   m_ShaderKeywords: _ALPHABLEND_ON
   m_LightmapFlags: 5
   m_CustomRenderQueue: 3000
+  stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
@@ -504,20 +507,20 @@ Material:
     m_Floats:
       data:
         first:
-          name: _Cutoff
-        second: .5
-      data:
-        first:
-          name: PixelSnap
-        second: 0
-      data:
-        first:
           name: _SrcBlend
         second: 5
       data:
         first:
           name: _DstBlend
         second: 10
+      data:
+        first:
+          name: _Cutoff
+        second: .5
+      data:
+        first:
+          name: PixelSnap
+        second: 0
       data:
         first:
           name: _Parallax

@@ -39,6 +39,7 @@ public class OutlineEffect : MonoBehaviour
     public Color lineColor1 = Color.red;
     public Color lineColor2 = Color.green;
     public Color lineColor3 = Color.blue;
+    public bool flipY = false;
 
     private Material outline1Material;
     private Material outline2Material;
@@ -247,6 +248,10 @@ public class OutlineEffect : MonoBehaviour
             outlineShaderMaterial.SetColor("_LineColor1", lineColor1);
             outlineShaderMaterial.SetColor("_LineColor2", lineColor2);
             outlineShaderMaterial.SetColor("_LineColor3", lineColor3);
+            if(flipY)
+                outlineShaderMaterial.SetInt("_FlipY", 1);
+            else
+                outlineShaderMaterial.SetInt("_FlipY", 0);
         }
 	}
 }
