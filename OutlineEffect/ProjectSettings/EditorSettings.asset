@@ -10,3 +10,6 @@ EditorSettings:
   m_WebSecurityEmulationHostUrl: http://www.mydomain.com/mygame.unity3d
   m_DefaultBehaviorMode: 1
   m_SpritePackerMode: 2
+  m_SpritePackerPaddingPower: 1
+  m_ProjectGenerationIncludedExtensions: txt;xml;fnt;cd
+  m_ProjectGenerationRootNamespace: 
