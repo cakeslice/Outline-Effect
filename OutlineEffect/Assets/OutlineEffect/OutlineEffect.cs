@@ -1,5 +1,5 @@
 /*
-//  Copyright (c) 2015 José Guerreiro. All rights reserved.
+//  Copyright (c) 2015 Josï¿½ Guerreiro. All rights reserved.
 //
 //  MIT license, see http://www.opensource.org/licenses/mit-license.php
 //  
@@ -139,7 +139,7 @@ public class OutlineEffect : MonoBehaviour
                     originalMaterials[i] = outlineRenderers[i].sharedMaterial;
                     originalLayers[i] = outlineRenderers[i].gameObject.layer;
 
-                    if (outlineRendererColors != null && outlineRendererColors.Contains(i))
+                    if (outlineRendererColors != null)
                         outlineRenderers[i].sharedMaterial = GetMaterialFromID(outlineRendererColors[i]);
                     else
                         outlineRenderers[i].sharedMaterial = outline1Material;
