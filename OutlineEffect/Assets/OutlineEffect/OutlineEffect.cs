@@ -42,7 +42,6 @@ public class OutlineEffect : MonoBehaviour
     public Color lineColor2 = Color.blue;
     public bool flipY = false;
     public bool darkOutlines = false;
-    public bool meshRendererSupport = false;
     public float alphaCutoff = .5f;
 
     private Material outline1Material;
@@ -149,7 +148,7 @@ public class OutlineEffect : MonoBehaviour
                     else
                         outlineRenderers[i].sharedMaterial = outline1Material;
 
-                    if (meshRendererSupport)
+                    if (outlineRenderers[i] is MeshRenderer)
                         outlineRenderers[i].material.mainTexture = originalMaterials[i].mainTexture;
 
                     outlineRenderers[i].gameObject.layer = LayerMask.NameToLayer("Outline");
@@ -169,7 +168,7 @@ public class OutlineEffect : MonoBehaviour
 
                     eraseRenderers[i].sharedMaterial = outlineEraseMaterial;
 
-                    if (meshRendererSupport)
+                    if (eraseRenderers[i] is MeshRenderer)
                         eraseRenderers[i].material.mainTexture = originalEraseMaterials[i].mainTexture;
 
                     eraseRenderers[i].gameObject.layer = LayerMask.NameToLayer("Outline");
