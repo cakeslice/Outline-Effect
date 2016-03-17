@@ -1,5 +1,5 @@
 /*
-//  Copyright (c) 2015 Jos� Guerreiro. All rights reserved.
+//  Copyright (c) 2015 José Guerreiro. All rights reserved.
 //
 //  MIT license, see http://www.opensource.org/licenses/mit-license.php
 //  
@@ -37,9 +37,9 @@ public class OutlineEffect : MonoBehaviour
     public float lineThickness = 4f;
     public float lineIntensity = .5f;
 
-    public Color lineColor1 = Color.red;
-    public Color lineColor2 = Color.green;
-    public Color lineColor3 = Color.blue;
+    public Color lineColor0 = Color.red;
+    public Color lineColor1 = Color.green;
+    public Color lineColor2 = Color.blue;
     public bool flipY = false;
     public bool darkOutlines = false;
     public bool meshRendererSupport = false;
@@ -62,7 +62,7 @@ public class OutlineEffect : MonoBehaviour
 
 	void OnEnable()
 	{   
-		CreateMaterialsIfNeeded();
+        CreateMaterialsIfNeeded();
 	}
 
 	void OnDisable()
@@ -102,16 +102,14 @@ public class OutlineEffect : MonoBehaviour
 
 	void Start () 
 	{
-        while (outlineRenderers.Count > outlineRendererColors.Count)
-        {
-            outlineRendererColors.Add(0);
-        }
-
 		CreateMaterialsIfNeeded();
 	}
 
 	void OnPreCull()
 	{
+        while (outlineRendererColors.Count < outlineRenderers.Count)
+            outlineRendererColors.Add(0);
+
         if (outlineRenderers.Distinct().Count() < outlineRenderers.Count)
             throw new System.Exception("Can't have duplicate outlines!");
 
@@ -146,7 +144,7 @@ public class OutlineEffect : MonoBehaviour
                     originalMaterials[i] = outlineRenderers[i].sharedMaterial;
                     originalLayers[i] = outlineRenderers[i].gameObject.layer;
 
-                    if (outlineRendererColors != null && outlineRendererColors.Count >= outlineRenderers.Count)
+                    if (outlineRendererColors != null && outlineRendererColors.Count > i)
                         outlineRenderers[i].sharedMaterial = GetMaterialFromID(outlineRendererColors[i]);
                     else
                         outlineRenderers[i].sharedMaterial = outline1Material;
@@ -265,9 +263,9 @@ public class OutlineEffect : MonoBehaviour
             outlineShaderMaterial.SetFloat("_LineThicknessX", lineThickness / 1000);
             outlineShaderMaterial.SetFloat("_LineThicknessY", (lineThickness * 2) / 1000);
             outlineShaderMaterial.SetFloat("_LineIntensity", lineIntensity);
-            outlineShaderMaterial.SetColor("_LineColor1", lineColor1);
-            outlineShaderMaterial.SetColor("_LineColor2", lineColor2);
-            outlineShaderMaterial.SetColor("_LineColor3", lineColor3);
+            outlineShaderMaterial.SetColor("_LineColor1", lineColor0);
+            outlineShaderMaterial.SetColor("_LineColor2", lineColor1);
+            outlineShaderMaterial.SetColor("_LineColor3", lineColor2);
             if(flipY)
                 outlineShaderMaterial.SetInt("_FlipY", 1);
             else
