@@ -41,7 +41,7 @@ Shader "Hidden/OutlineBufferEffect" {
 			"CanUseSpriteAtlas"="True"
 		}
 
-		Cull Off
+		Cull Back
 		Lighting Off
 		ZWrite Off
 		Blend One OneMinusSrcAlpha
@@ -52,6 +52,7 @@ Shader "Hidden/OutlineBufferEffect" {
 
 		sampler2D _MainTex;
 		fixed4 _Color;
+		float _AlphaCutoff;
 
 		struct Input
 		{
@@ -72,7 +73,10 @@ Shader "Hidden/OutlineBufferEffect" {
 		void surf (Input IN, inout SurfaceOutput o)
 		{
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * IN.color;
+			if (c.a < _AlphaCutoff) discard;
+
 			float alpha = c.a * 99999999;
+
 			o.Albedo = _Color * alpha;
 			o.Alpha = alpha;
 		}

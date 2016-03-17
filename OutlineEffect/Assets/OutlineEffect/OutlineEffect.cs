@@ -42,6 +42,8 @@ public class OutlineEffect : MonoBehaviour
     public Color lineColor3 = Color.blue;
     public bool flipY = false;
     public bool darkOutlines = false;
+    public bool meshRendererSupport = false;
+    public float alphaCutoff = .5f;
 
     private Material outline1Material;
     private Material outline2Material;
@@ -50,7 +52,7 @@ public class OutlineEffect : MonoBehaviour
     private Shader outlineShader;
     private Shader outlineBufferShader;
 	private Material outlineShaderMaterial;
-	private RenderTexture renderTexture;
+    private RenderTexture renderTexture;
 	private Camera _camera;
 
     Material[] originalMaterials = new Material[1];
@@ -100,6 +102,11 @@ public class OutlineEffect : MonoBehaviour
 
 	void Start () 
 	{
+        while (outlineRenderers.Count > outlineRendererColors.Count)
+        {
+            outlineRendererColors.Add(0);
+        }
+
 		CreateMaterialsIfNeeded();
 	}
 
@@ -139,10 +146,13 @@ public class OutlineEffect : MonoBehaviour
                     originalMaterials[i] = outlineRenderers[i].sharedMaterial;
                     originalLayers[i] = outlineRenderers[i].gameObject.layer;
 
-                    if (outlineRendererColors != null)
+                    if (outlineRendererColors != null && outlineRendererColors.Count >= outlineRenderers.Count)
                         outlineRenderers[i].sharedMaterial = GetMaterialFromID(outlineRendererColors[i]);
                     else
                         outlineRenderers[i].sharedMaterial = outline1Material;
+
+                    if (meshRendererSupport)
+                        outlineRenderers[i].material.mainTexture = originalMaterials[i].mainTexture;
 
                     outlineRenderers[i].gameObject.layer = LayerMask.NameToLayer("Outline");
                 }
@@ -160,6 +170,10 @@ public class OutlineEffect : MonoBehaviour
                     originalEraseLayers[i] = eraseRenderers[i].gameObject.layer;
 
                     eraseRenderers[i].sharedMaterial = outlineEraseMaterial;
+
+                    if (meshRendererSupport)
+                        eraseRenderers[i].material.mainTexture = originalEraseMaterials[i].mainTexture;
+
                     eraseRenderers[i].gameObject.layer = LayerMask.NameToLayer("Outline");
                 }
             }
@@ -222,9 +236,13 @@ public class OutlineEffect : MonoBehaviour
             outline2Material = CreateMaterial(new Color(0, 1, 0, 0));
         if (outline3Material == null)
             outline3Material = CreateMaterial(new Color(0, 0, 1, 0));
-	}
 
-	private void DestroyMaterials()
+        outline1Material.SetFloat("_AlphaCutoff", alphaCutoff);
+        outline2Material.SetFloat("_AlphaCutoff", alphaCutoff);
+        outline3Material.SetFloat("_AlphaCutoff", alphaCutoff);
+    }
+
+    private void DestroyMaterials()
 	{
 		DestroyImmediate(outlineShaderMaterial);
         DestroyImmediate(outlineEraseMaterial);
