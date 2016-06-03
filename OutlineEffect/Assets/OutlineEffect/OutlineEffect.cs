@@ -131,6 +131,7 @@ public class OutlineEffect : MonoBehaviour
         _camera.backgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
         _camera.clearFlags = CameraClearFlags.SolidColor;
         _camera.cullingMask = LayerMask.GetMask("Outline");
+        _camera.rect = new Rect (0, 0, 1, 1);
 
         if (outlineRenderers != null)
         {
