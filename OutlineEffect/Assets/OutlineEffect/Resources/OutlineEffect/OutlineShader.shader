@@ -72,6 +72,7 @@ Shader "Hidden/OutlineEffect"
 			half4 _LineColor3;
 			int _FlipY;
 			int _Dark;
+			uniform float4 _MainTex_TexelSize;
 
 			half4 frag (v2f input) : COLOR
 			{	
@@ -86,10 +87,10 @@ Shader "Hidden/OutlineEffect"
 				half4 outline = 0;
 				bool hasOutline = false;
 
-				half4 sample1 = tex2D(_OutlineSource, uv + float2(_LineThicknessX,0.0));
-				half4 sample2 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX,0.0));
-				half4 sample3 = tex2D(_OutlineSource, uv + float2(.0,_LineThicknessY));
-				half4 sample4 = tex2D(_OutlineSource, uv + float2(.0,-_LineThicknessY));
+				half4 sample1 = tex2D(_OutlineSource, uv + float2(_LineThicknessX,0.0) * _MainTex_TexelSize.x * 1000.0f);
+				half4 sample2 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX,0.0) * _MainTex_TexelSize.x * 1000.0f);
+				half4 sample3 = tex2D(_OutlineSource, uv + float2(.0,_LineThicknessY) * _MainTex_TexelSize.y * 1000.0f);
+				half4 sample4 = tex2D(_OutlineSource, uv + float2(.0,-_LineThicknessY) * _MainTex_TexelSize.y * 1000.0f);
 				
 				if(outlineSource.a < h)
 				{
