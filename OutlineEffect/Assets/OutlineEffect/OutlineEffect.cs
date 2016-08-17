@@ -1,5 +1,5 @@
 /*
-//  Copyright (c) 2015 José Guerreiro. All rights reserved.
+//  Copyright (c) 2015 JosÃ© Guerreiro. All rights reserved.
 //
 //  MIT license, see http://www.opensource.org/licenses/mit-license.php
 //  
@@ -30,13 +30,10 @@ using System.Linq;
 [RequireComponent(typeof(Camera))]
 public class OutlineEffect : MonoBehaviour
 {
-    List<Renderer> outlineRenderers = new List<Renderer>();
-    List<Renderer> eraseRenderers = new List<Renderer>();
+	List<Outline> outlines = new List<Outline>();
 
     public Camera sourceCamera;
     public Camera outlineCamera;
-
-    public List<int> outlineRendererColors = new List<int>();
 
     public float lineThickness = 4f;
     public float lineIntensity = .5f;
@@ -56,11 +53,6 @@ public class OutlineEffect : MonoBehaviour
     Shader outlineBufferShader;
     Material outlineShaderMaterial;
     RenderTexture renderTexture;
-
-    List<Material> originalMaterials = new List<Material>();
-    List<int> originalLayers = new List<int>();
-    List<Material> originalEraseMaterials = new List<Material>();
-    List<int> originalEraseLayers = new List<int>();
 
     Material GetMaterialFromID(int ID)
     {
@@ -120,78 +112,43 @@ public class OutlineEffect : MonoBehaviour
 
     void OnPreCull()
     {
-        while (outlineRendererColors.Count < outlineRenderers.Count)
-            outlineRendererColors.Add(0);
-
-        if (outlineRenderers != null)
+        if (outlines != null)
         {
-            for (int i = 0; i < outlineRenderers.Count; i++)
+            for (int i = 0; i < outlines.Count; i++)
             {
-                if (outlineRenderers[i] != null)
+                if (outlines[i] != null)
                 {
-                    originalMaterials[i] = outlineRenderers[i].sharedMaterial;
-                    originalLayers[i] = outlineRenderers[i].gameObject.layer;
+					outlines[i].originalMaterial = outlines[i].GetComponent<Renderer>().sharedMaterial;
+					outlines[i].originalLayer = outlines[i].gameObject.layer;
 
-                    if (outlineRendererColors != null && outlineRendererColors.Count > i)
-                        outlineRenderers[i].sharedMaterial = GetMaterialFromID(outlineRendererColors[i]);
-                    else
-                        outlineRenderers[i].sharedMaterial = outline1Material;
+					if(outlines[i].eraseRenderer)
+						outlines[i].GetComponent<Renderer>().sharedMaterial = outlineEraseMaterial;
+					else
+						outlines[i].GetComponent<Renderer>().sharedMaterial = GetMaterialFromID(outlines[i].color);
 
-                    if (outlineRenderers[i] is MeshRenderer)
+                    if (outlines[i].GetComponent<Renderer>() is MeshRenderer)
                     {
-                        outlineRenderers[i].sharedMaterial.mainTexture = originalMaterials[i].mainTexture;
+                        outlines[i].GetComponent<Renderer>().sharedMaterial.mainTexture = outlines[i].originalMaterial.mainTexture;
                     }
 
-                    outlineRenderers[i].gameObject.layer = LayerMask.NameToLayer("Outline");
-                }
-            }
-        }
-        if (eraseRenderers != null)
-        {
-            for (int i = 0; i < eraseRenderers.Count; i++)
-            {
-                if (eraseRenderers[i] != null)
-                {
-                    originalEraseMaterials[i] = eraseRenderers[i].sharedMaterial;
-                    originalEraseLayers[i] = eraseRenderers[i].gameObject.layer;
-
-                    eraseRenderers[i].sharedMaterial = outlineEraseMaterial;
-
-                    if (eraseRenderers[i] is MeshRenderer)
-                        eraseRenderers[i].sharedMaterial.mainTexture = originalEraseMaterials[i].mainTexture;
-
-                    eraseRenderers[i].gameObject.layer = LayerMask.NameToLayer("Outline");
+                    outlines[i].gameObject.layer = LayerMask.NameToLayer("Outline");
                 }
             }
         }
 
         outlineCamera.Render();
 
-        if (outlineRenderers != null)
+        if (outlines != null)
         {
-            for (int i = 0; i < outlineRenderers.Count; i++)
+            for (int i = 0; i < outlines.Count; i++)
             {
-                if (outlineRenderers[i] != null)
+                if (outlines[i] != null)
                 {
-                    if (outlineRenderers[i] is MeshRenderer)
-                        outlineRenderers[i].sharedMaterial.mainTexture = null;
+                    if (outlines[i].GetComponent<Renderer>() is MeshRenderer)
+						outlines[i].GetComponent<Renderer>().sharedMaterial.mainTexture = null;
 
-                    outlineRenderers[i].sharedMaterial = originalMaterials[i];
-                    outlineRenderers[i].gameObject.layer = originalLayers[i];
-                }
-            }
-        }
-        if (eraseRenderers != null)
-        {
-            for (int i = 0; i < eraseRenderers.Count; i++)
-            {
-                if (eraseRenderers[i] != null)
-                {
-                    if (eraseRenderers[i] is MeshRenderer)
-                        eraseRenderers[i].sharedMaterial.mainTexture = null;
-
-                    eraseRenderers[i].sharedMaterial = originalEraseMaterials[i];
-                    eraseRenderers[i].gameObject.layer = originalEraseLayers[i];
+					outlines[i].GetComponent<Renderer>().sharedMaterial = outlines[i].originalMaterial;
+					outlines[i].gameObject.layer = outlines[i].originalLayer;
                 }
             }
         }
@@ -286,41 +243,16 @@ public class OutlineEffect : MonoBehaviour
         outlineCamera.rect = new Rect(0, 0, 1, 1);
     }
 
-    public void AddOutlineRenderer(Renderer renderer)
+    public void AddOutline(Outline outline)
     {
-        if (!outlineRenderers.Contains(renderer))
+        if (!outlines.Contains(outline))
         {
-            outlineRenderers.Add(renderer);
-            originalMaterials.Add(null);
-            originalLayers.Add(0);
+			outlines.Add(outline);
         }
+    }
+    public void RemoveOutline(Outline outline)
+	{
+		outlines.Remove(outline);
     }
 
-    public void RemoveOutlineRenderer(Renderer renderer)
-    {
-        if (outlineRenderers.Remove(renderer))
-        {
-            originalMaterials.RemoveAt(originalLayers.Count - 1);
-            originalLayers.RemoveAt(originalLayers.Count - 1);
-        }
-    }
-
-    public void AddEraseRenderer(Renderer renderer)
-    {
-        if (!eraseRenderers.Contains(renderer))
-        {
-            eraseRenderers.Add(renderer);
-            originalEraseMaterials.Add(null);
-            originalEraseLayers.Add(0);
-        }
-    }
-
-    public void RemoveEraseRenderer(Renderer renderer)
-    {
-        if (eraseRenderers.Remove(renderer))
-        {
-            originalEraseMaterials.RemoveAt(eraseRenderers.Count - 1);
-            originalEraseLayers.RemoveAt(eraseRenderers.Count - 1);
-        }
-    }
 }

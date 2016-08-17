@@ -99,6 +99,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 96400162}
   - 212: {fileID: 96400161}
+  - 114: {fileID: 96400163}
   m_Layer: 0
   m_Name: HL3
   m_TagString: Player
@@ -153,6 +154,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
+--- !u!114 &96400163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 96400160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineEffect: {fileID: 0}
+  color: 2
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterial: {fileID: 0}
 --- !u!1 &115619422
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,15 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a78da3f00f3328541b4526c0b0b5ec5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineRenderers:
-  - {fileID: 1937169228}
-  - {fileID: 96400161}
-  - {fileID: 1571299885}
-  - {fileID: 0}
-  - {fileID: 354784836}
-  outlineRendererColors: 000000000100000002000000
-  eraseRenderers:
-  - {fileID: 1079036020}
+  sourceCamera: {fileID: 0}
+  outlineCamera: {fileID: 0}
   lineThickness: 1
   lineIntensity: 1
   lineColor0: {r: 1, g: 0, b: 0, a: 1}
@@ -312,7 +322,7 @@ MonoBehaviour:
   hdr: 0
   sepBlurSpread: 6
   quality: 1
-  bloomIntensity: 5
+  bloomIntensity: 1
   bloomThreshold: 0.5
   bloomThresholdColor: {r: 1, g: 1, b: 1, a: 1}
   bloomBlurIterations: 2
@@ -343,6 +353,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 354784837}
   - 212: {fileID: 354784836}
+  - 114: {fileID: 354784838}
   m_Layer: 0
   m_Name: HL3
   m_TagString: Player
@@ -397,6 +408,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!114 &354784838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 354784835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineEffect: {fileID: 0}
+  color: 0
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterial: {fileID: 0}
 --- !u!1 &508253892
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,10 +449,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 508253892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29d0522c9e3387e4f974b611a5d890a2, type: 3}
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 508253894}
+  outlineEffect: {fileID: 0}
+  color: 0
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterial: {fileID: 0}
 --- !u!212 &508253894
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -482,6 +513,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1079036021}
   - 212: {fileID: 1079036020}
+  - 114: {fileID: 1079036022}
   m_Layer: 0
   m_Name: crate
   m_TagString: Player
@@ -536,6 +568,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &1079036022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1079036019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineEffect: {fileID: 0}
+  color: 0
+  eraseRenderer: 1
+  originalLayer: 0
+  originalMaterial: {fileID: 0}
 --- !u!21 &1518541379
 Material:
   serializedVersion: 6
@@ -685,6 +733,7 @@ GameObject:
   - 135: {fileID: 1571299886}
   - 23: {fileID: 1571299885}
   - 114: {fileID: 1571299889}
+  - 114: {fileID: 1571299890}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -764,6 +813,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdbc72f5658a23940bbdac31a9069f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1571299890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1571299884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineEffect: {fileID: 0}
+  color: 0
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterial: {fileID: 0}
 --- !u!212 &1937169228
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -807,6 +872,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2049687302}
   - 212: {fileID: 1937169228}
+  - 114: {fileID: 2049687303}
   m_Layer: 0
   m_Name: HL3
   m_TagString: Player
@@ -827,6 +893,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &2049687303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2049687301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineEffect: {fileID: 0}
+  color: 1
+  eraseRenderer: 0
+  originalLayer: 0
+  originalMaterial: {fileID: 0}
 --- !u!1 &2143441684
 GameObject:
   m_ObjectHideFlags: 0
