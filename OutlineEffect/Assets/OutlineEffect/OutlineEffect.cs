@@ -28,11 +28,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 [RequireComponent(typeof(Camera))]
-public class OutlineEffect : MonoBehaviour 
+public class OutlineEffect : MonoBehaviour
 {
-	public List<Renderer> outlineRenderers = new List<Renderer>();
+    List<Renderer> outlineRenderers = new List<Renderer>();
+    List<Renderer> eraseRenderers = new List<Renderer>();
+
+    public Camera sourceCamera;
+    public Camera outlineCamera;
+
     public List<int> outlineRendererColors = new List<int>();
-    public List<Renderer> eraseRenderers = new List<Renderer>();
 
     public float lineThickness = 4f;
     public float lineIntensity = .5f;
@@ -44,36 +48,19 @@ public class OutlineEffect : MonoBehaviour
     public bool darkOutlines = false;
     public float alphaCutoff = .5f;
 
-    private Material outline1Material;
-    private Material outline2Material;
-    private Material outline3Material;
-    private Material outlineEraseMaterial;
-    private Shader outlineShader;
-    private Shader outlineBufferShader;
-	private Material outlineShaderMaterial;
-    private RenderTexture renderTexture;
-	private Camera _camera;
+    Material outline1Material;
+    Material outline2Material;
+    Material outline3Material;
+    Material outlineEraseMaterial;
+    Shader outlineShader;
+    Shader outlineBufferShader;
+    Material outlineShaderMaterial;
+    RenderTexture renderTexture;
 
-    Material[] originalMaterials = new Material[1];
-    int[] originalLayers = new int[1];
-    Material[] originalEraseMaterials = new Material[1];
-    int[] originalEraseLayers = new int[1];
-
-	void OnEnable()
-	{   
-        CreateMaterialsIfNeeded();
-	}
-
-	void OnDisable()
-	{
-		DestroyMaterials();
-
-		if( _camera)
-		{
-			DestroyImmediate( _camera.gameObject);
-			_camera = null;
-		}
-	}
+    List<Material> originalMaterials = new List<Material>();
+    List<int> originalLayers = new List<int>();
+    List<Material> originalEraseMaterials = new List<Material>();
+    List<int> originalEraseLayers = new List<int>();
 
     Material GetMaterialFromID(int ID)
     {
@@ -99,44 +86,45 @@ public class OutlineEffect : MonoBehaviour
         return m;
     }
 
-	void Start () 
-	{
-		CreateMaterialsIfNeeded();
-	}
+    void Start()
+    {
+        CreateMaterialsIfNeeded();
+        UpdateMaterialsPublicProperties();
 
-	void OnPreCull()
-	{
+        if (sourceCamera == null)
+        {
+            sourceCamera = GetComponent<Camera>();
+
+            if (sourceCamera == null)
+                sourceCamera = Camera.main;
+        }
+
+        if (outlineCamera == null)
+        {
+            GameObject cameraGameObject = new GameObject("Outline Camera");
+            cameraGameObject.transform.parent = sourceCamera.transform;
+            outlineCamera = cameraGameObject.AddComponent<Camera>();
+        }
+
+        UpdateOutlineCameraFromSource();
+
+        renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
+        outlineCamera.targetTexture = renderTexture;
+    }
+
+    void OnDestroy()
+    {
+        renderTexture.Release();
+        DestroyMaterials();
+    }
+
+    void OnPreCull()
+    {
         while (outlineRendererColors.Count < outlineRenderers.Count)
             outlineRendererColors.Add(0);
 
-        if (outlineRenderers.Distinct().Count() < outlineRenderers.Count)
-            throw new System.Exception("Can't have duplicate outlines!");
-
-        Camera camera = GetComponent<Camera>();
-
-        int width = camera.pixelWidth;
-        int height = camera.pixelHeight;
-        renderTexture = RenderTexture.GetTemporary(width, height, 16, RenderTextureFormat.Default);
-
-        if (_camera == null)
-        {
-            GameObject cameraGameObject = new GameObject("OutlineCamera");
-            cameraGameObject.hideFlags = HideFlags.HideAndDontSave;
-            _camera = cameraGameObject.AddComponent<Camera>();
-        }
-
-        _camera.CopyFrom(camera);
-        _camera.renderingPath = RenderingPath.Forward;
-        _camera.enabled = false;
-        _camera.backgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-        _camera.clearFlags = CameraClearFlags.SolidColor;
-        _camera.cullingMask = LayerMask.GetMask("Outline");
-        _camera.rect = new Rect (0, 0, 1, 1);
-
         if (outlineRenderers != null)
         {
-            originalMaterials = new Material[outlineRenderers.Count];
-            originalLayers = new int[outlineRenderers.Count];
             for (int i = 0; i < outlineRenderers.Count; i++)
             {
                 if (outlineRenderers[i] != null)
@@ -150,7 +138,9 @@ public class OutlineEffect : MonoBehaviour
                         outlineRenderers[i].sharedMaterial = outline1Material;
 
                     if (outlineRenderers[i] is MeshRenderer)
-                        outlineRenderers[i].material.mainTexture = originalMaterials[i].mainTexture;
+                    {
+                        outlineRenderers[i].sharedMaterial.mainTexture = originalMaterials[i].mainTexture;
+                    }
 
                     outlineRenderers[i].gameObject.layer = LayerMask.NameToLayer("Outline");
                 }
@@ -158,8 +148,6 @@ public class OutlineEffect : MonoBehaviour
         }
         if (eraseRenderers != null)
         {
-            originalEraseMaterials = new Material[eraseRenderers.Count];
-            originalEraseLayers = new int[eraseRenderers.Count];
             for (int i = 0; i < eraseRenderers.Count; i++)
             {
                 if (eraseRenderers[i] != null)
@@ -170,15 +158,14 @@ public class OutlineEffect : MonoBehaviour
                     eraseRenderers[i].sharedMaterial = outlineEraseMaterial;
 
                     if (eraseRenderers[i] is MeshRenderer)
-                        eraseRenderers[i].material.mainTexture = originalEraseMaterials[i].mainTexture;
+                        eraseRenderers[i].sharedMaterial.mainTexture = originalEraseMaterials[i].mainTexture;
 
                     eraseRenderers[i].gameObject.layer = LayerMask.NameToLayer("Outline");
                 }
             }
         }
 
-        _camera.targetTexture = renderTexture;
-        _camera.Render();
+        outlineCamera.Render();
 
         if (outlineRenderers != null)
         {
@@ -186,6 +173,9 @@ public class OutlineEffect : MonoBehaviour
             {
                 if (outlineRenderers[i] != null)
                 {
+                    if (outlineRenderers[i] is MeshRenderer)
+                        outlineRenderers[i].sharedMaterial.mainTexture = null;
+
                     outlineRenderers[i].sharedMaterial = originalMaterials[i];
                     outlineRenderers[i].gameObject.layer = originalLayers[i];
                 }
@@ -197,40 +187,39 @@ public class OutlineEffect : MonoBehaviour
             {
                 if (eraseRenderers[i] != null)
                 {
+                    if (eraseRenderers[i] is MeshRenderer)
+                        eraseRenderers[i].sharedMaterial.mainTexture = null;
+
                     eraseRenderers[i].sharedMaterial = originalEraseMaterials[i];
                     eraseRenderers[i].gameObject.layer = originalEraseLayers[i];
                 }
             }
         }
-	}
+    }
 
-	void OnRenderImage( RenderTexture source, RenderTexture destination)
-	{
-		CreateMaterialsIfNeeded();
-		UpdateMaterialsPublicProperties();
+    void OnRenderImage(RenderTexture source, RenderTexture destination)
+    {
+        outlineShaderMaterial.SetTexture("_OutlineSource", renderTexture);
+        Graphics.Blit(source, destination, outlineShaderMaterial);
+    }
 
-		outlineShaderMaterial.SetTexture("_OutlineSource", renderTexture);
-		Graphics.Blit(source, destination, outlineShaderMaterial);
-		RenderTexture.ReleaseTemporary(renderTexture);
-	}
-
-	private void CreateMaterialsIfNeeded()
-	{
-        if(outlineShader == null)
+    private void CreateMaterialsIfNeeded()
+    {
+        if (outlineShader == null)
             outlineShader = Resources.Load<Shader>("OutlineEffect/OutlineShader");
         if (outlineBufferShader == null)
             outlineBufferShader = Resources.Load<Shader>("OutlineEffect/OutlineBufferShader");
-		if(outlineShaderMaterial == null)
-		{
-			outlineShaderMaterial = new Material(outlineShader);
-			outlineShaderMaterial.hideFlags = HideFlags.HideAndDontSave;
+        if (outlineShaderMaterial == null)
+        {
+            outlineShaderMaterial = new Material(outlineShader);
+            outlineShaderMaterial.hideFlags = HideFlags.HideAndDontSave;
             UpdateMaterialsPublicProperties();
-		}
-        if(outlineEraseMaterial == null)
+        }
+        if (outlineEraseMaterial == null)
             outlineEraseMaterial = CreateMaterial(new Color(0, 0, 0, 0));
-        if(outline1Material == null)
+        if (outline1Material == null)
             outline1Material = CreateMaterial(new Color(1, 0, 0, 0));
-        if(outline2Material == null)
+        if (outline2Material == null)
             outline2Material = CreateMaterial(new Color(0, 1, 0, 0));
         if (outline3Material == null)
             outline3Material = CreateMaterial(new Color(0, 0, 1, 0));
@@ -241,32 +230,32 @@ public class OutlineEffect : MonoBehaviour
     }
 
     private void DestroyMaterials()
-	{
-		DestroyImmediate(outlineShaderMaterial);
+    {
+        DestroyImmediate(outlineShaderMaterial);
         DestroyImmediate(outlineEraseMaterial);
         DestroyImmediate(outline1Material);
         DestroyImmediate(outline2Material);
         DestroyImmediate(outline3Material);
         outlineShader = null;
         outlineBufferShader = null;
-		outlineShaderMaterial = null;
+        outlineShaderMaterial = null;
         outlineEraseMaterial = null;
         outline1Material = null;
         outline2Material = null;
         outline3Material = null;
-	}
+    }
 
-	private void UpdateMaterialsPublicProperties()
-	{
-		if(outlineShaderMaterial)
-		{
+    private void UpdateMaterialsPublicProperties()
+    {
+        if (outlineShaderMaterial)
+        {
             outlineShaderMaterial.SetFloat("_LineThicknessX", lineThickness / 1000);
             outlineShaderMaterial.SetFloat("_LineThicknessY", lineThickness / 1000);
             outlineShaderMaterial.SetFloat("_LineIntensity", lineIntensity);
             outlineShaderMaterial.SetColor("_LineColor1", lineColor0);
             outlineShaderMaterial.SetColor("_LineColor2", lineColor1);
             outlineShaderMaterial.SetColor("_LineColor3", lineColor2);
-            if(flipY)
+            if (flipY)
                 outlineShaderMaterial.SetInt("_FlipY", 1);
             else
                 outlineShaderMaterial.SetInt("_FlipY", 0);
@@ -275,5 +264,63 @@ public class OutlineEffect : MonoBehaviour
             else
                 outlineShaderMaterial.SetInt("_Dark", 0);
         }
-	}
+    }
+
+    // Call this when source camera has been changed.
+    public void UpdateFromSource()
+    {
+        renderTexture.width = sourceCamera.pixelWidth;
+        renderTexture.height = sourceCamera.pixelHeight;
+
+        UpdateOutlineCameraFromSource();
+    }
+
+    void UpdateOutlineCameraFromSource()
+    {
+        outlineCamera.CopyFrom(sourceCamera);
+        outlineCamera.renderingPath = RenderingPath.Forward;
+        outlineCamera.enabled = false;
+        outlineCamera.backgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+        outlineCamera.clearFlags = CameraClearFlags.SolidColor;
+        outlineCamera.cullingMask = LayerMask.GetMask("Outline");
+        outlineCamera.rect = new Rect(0, 0, 1, 1);
+    }
+
+    public void AddOutlineRenderer(Renderer renderer)
+    {
+        if (!outlineRenderers.Contains(renderer))
+        {
+            outlineRenderers.Add(renderer);
+            originalMaterials.Add(null);
+            originalLayers.Add(0);
+        }
+    }
+
+    public void RemoveOutlineRenderer(Renderer renderer)
+    {
+        if (outlineRenderers.Remove(renderer))
+        {
+            originalMaterials.RemoveAt(originalLayers.Count - 1);
+            originalLayers.RemoveAt(originalLayers.Count - 1);
+        }
+    }
+
+    public void AddEraseRenderer(Renderer renderer)
+    {
+        if (!eraseRenderers.Contains(renderer))
+        {
+            eraseRenderers.Add(renderer);
+            originalEraseMaterials.Add(null);
+            originalEraseLayers.Add(0);
+        }
+    }
+
+    public void RemoveEraseRenderer(Renderer renderer)
+    {
+        if (eraseRenderers.Remove(renderer))
+        {
+            originalEraseMaterials.RemoveAt(eraseRenderers.Count - 1);
+            originalEraseLayers.RemoveAt(eraseRenderers.Count - 1);
+        }
+    }
 }
