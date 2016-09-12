@@ -98,10 +98,8 @@ public class OutlineEffect : MonoBehaviour
             outlineCamera = cameraGameObject.AddComponent<Camera>();
         }
 
-        UpdateOutlineCameraFromSource();
-
-        renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
-        outlineCamera.targetTexture = renderTexture;
+		renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
+		UpdateOutlineCameraFromSource();
     }
 
     void OnDestroy()
@@ -112,9 +110,17 @@ public class OutlineEffect : MonoBehaviour
 
     void OnPreCull()
     {
-        if (outlines != null)
+		if(renderTexture.width != sourceCamera.pixelWidth || renderTexture.height != sourceCamera.pixelHeight)
+		{
+			renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
+			outlineCamera.targetTexture = renderTexture;
+		}
+		UpdateMaterialsPublicProperties();
+		UpdateOutlineCameraFromSource();
+
+		if (outlines != null)
         {
-            for (int i = 0; i < outlines.Count; i++)
+			for (int i = 0; i < outlines.Count; i++)
             {
                 if (outlines[i] != null)
                 {
@@ -223,25 +229,17 @@ public class OutlineEffect : MonoBehaviour
         }
     }
 
-    // Call this when source camera has been changed.
-    public void UpdateFromSource()
-    {
-        renderTexture.width = sourceCamera.pixelWidth;
-        renderTexture.height = sourceCamera.pixelHeight;
-
-        UpdateOutlineCameraFromSource();
-    }
-
     void UpdateOutlineCameraFromSource()
     {
         outlineCamera.CopyFrom(sourceCamera);
         outlineCamera.renderingPath = RenderingPath.Forward;
-        outlineCamera.enabled = false;
         outlineCamera.backgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
         outlineCamera.clearFlags = CameraClearFlags.SolidColor;
         outlineCamera.cullingMask = LayerMask.GetMask("Outline");
         outlineCamera.rect = new Rect(0, 0, 1, 1);
-    }
+		outlineCamera.enabled = true;
+		outlineCamera.targetTexture = renderTexture;
+	}
 
     public void AddOutline(Outline outline)
     {
