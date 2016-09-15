@@ -42,7 +42,7 @@ public class OutlineEffect : MonoBehaviour
     public Color lineColor1 = Color.green;
     public Color lineColor2 = Color.blue;
     public bool flipY = false;
-    public bool darkOutlines = false;
+    public bool additiveRendering = true;
     public float alphaCutoff = .5f;
 
     Material outline1Material;
@@ -222,7 +222,7 @@ public class OutlineEffect : MonoBehaviour
                 outlineShaderMaterial.SetInt("_FlipY", 1);
             else
                 outlineShaderMaterial.SetInt("_FlipY", 0);
-            if (darkOutlines)
+            if (!additiveRendering)
                 outlineShaderMaterial.SetInt("_Dark", 1);
             else
                 outlineShaderMaterial.SetInt("_Dark", 0);

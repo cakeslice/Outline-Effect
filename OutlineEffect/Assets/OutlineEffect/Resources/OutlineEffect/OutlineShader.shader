@@ -96,17 +96,23 @@ Shader "Hidden/OutlineEffect"
 				{
 					if (sample1.r > h || sample2.r > h || sample3.r > h || sample4.r > h)
 					{
-						outline = _LineColor1 * _LineIntensity;
+						outline = _LineColor1 * _LineIntensity * _LineColor1.a;		
+						if (_Dark)
+							originalPixel *= 1 - _LineColor1.a;
 						hasOutline = true;
 					}
 					else if (sample1.g > h || sample2.g > h || sample3.g > h || sample4.g > h)
 					{
-						outline = _LineColor2 * _LineIntensity;
+						outline = _LineColor2 * _LineIntensity * _LineColor2.a;
+						if(_Dark)
+							originalPixel *= 1 - _LineColor2.a;
 						hasOutline = true;
 					}
 					else if (sample1.b > h || sample2.b > h || sample3.b > h || sample4.b > h)
 					{
-						outline = _LineColor3 * _LineIntensity;
+						outline = _LineColor3 * _LineIntensity * _LineColor3.a;
+						if (_Dark)
+							originalPixel *= 1 - _LineColor3.a;
 						hasOutline = true;
 					}
 				}					
@@ -115,12 +121,17 @@ Shader "Hidden/OutlineEffect"
 				if (_Dark)
 				{
 					if (hasOutline)
-						return originalPixel * (1 - _LineColor1.a) + outline;
+						return originalPixel + outline;
 					else
 						return originalPixel;
 				}
 				else
-					return originalPixel + outline;
+				{
+					if(hasOutline)
+						return originalPixel + outline * _LineColor1.a;
+					else
+						return originalPixel;
+				}
 			}
 			
 			ENDCG
