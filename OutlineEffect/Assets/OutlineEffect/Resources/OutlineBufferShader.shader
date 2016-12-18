@@ -52,7 +52,7 @@ Shader "Hidden/OutlineBufferEffect" {
 
 		sampler2D _MainTex;
 		fixed4 _Color;
-		float _AlphaCutoff;
+		float _OutlineAlphaCutoff;
 
 		struct Input
 		{
@@ -73,7 +73,7 @@ Shader "Hidden/OutlineBufferEffect" {
 		void surf (Input IN, inout SurfaceOutput o)
 		{
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * IN.color;
-			if (c.a < _AlphaCutoff) discard;
+			if (c.a < _OutlineAlphaCutoff) discard;
 
 			float alpha = c.a * 99999999;
 

@@ -19,7 +19,7 @@ public class Rotate : MonoBehaviour
         if(timer < 0)
         {
             timer = time;
-            GetComponent<Outline>().enabled = !GetComponent<Outline>().enabled;
+            //GetComponent<Outline>().enabled = !GetComponent<Outline>().enabled;
         }
     }
 }

@@ -204,10 +204,6 @@ public class OutlineEffect : MonoBehaviour
             outline2Material = CreateMaterial(new Color(0, 1, 0, 0));
         if (outline3Material == null)
             outline3Material = CreateMaterial(new Color(0, 0, 1, 0));
-
-        outline1Material.SetFloat("_AlphaCutoff", alphaCutoff);
-        outline2Material.SetFloat("_AlphaCutoff", alphaCutoff);
-        outline3Material.SetFloat("_AlphaCutoff", alphaCutoff);
     }
 
     private void DestroyMaterials()
@@ -249,6 +245,8 @@ public class OutlineEffect : MonoBehaviour
                 outlineShaderMaterial.SetInt("_CornerOutlines", 1);
             else
                 outlineShaderMaterial.SetInt("_CornerOutlines", 0);
+
+            Shader.SetGlobalFloat("_OutlineAlphaCutoff", alphaCutoff);
         }
     }
 
