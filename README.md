@@ -12,7 +12,9 @@ HDR support (useful for bloom, etc...)
 
 Alpha cutout option
 
-Merged outline between multiple renderers (or you can disable it)
+Additive outline rendering option
+
+Merged outline between renderers (or you can add outlines between different colors)
 
 Erase option to keep outlines behind specific renderers
 
