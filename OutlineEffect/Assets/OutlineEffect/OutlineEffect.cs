@@ -35,16 +35,24 @@ public class OutlineEffect : MonoBehaviour
     public Camera sourceCamera;
     public Camera outlineCamera;
 
+    [Range(0, 4)]
     public float lineThickness = 4f;
+    [Range(0, 10)]
     public float lineIntensity = .5f;
+    [Range(0, 1)]
+    public float fillAmount = 0.2f;
 
     public Color lineColor0 = Color.red;
     public Color lineColor1 = Color.green;
     public Color lineColor2 = Color.blue;
-    public bool flipY = false;
-    public bool additiveRendering = true;
-    public bool addLinesBetweenColors = false;
+
+    [Range(0, 1)]
     public float alphaCutoff = .5f;
+    public bool additiveRendering = true;
+    public bool flipY = false;
+    [Header("These settings can affect performance!")]
+    public bool cornerOutlines = false;
+    public bool addLinesBetweenColors = false;
 
     Material outline1Material;
     Material outline2Material;
@@ -225,6 +233,7 @@ public class OutlineEffect : MonoBehaviour
             outlineShaderMaterial.SetFloat("_LineThicknessX", lineThickness / 1000);
             outlineShaderMaterial.SetFloat("_LineThicknessY", lineThickness / 1000);
             outlineShaderMaterial.SetFloat("_LineIntensity", lineIntensity);
+            outlineShaderMaterial.SetFloat("_FillAmount", fillAmount);
             outlineShaderMaterial.SetColor("_LineColor1", lineColor0);
             outlineShaderMaterial.SetColor("_LineColor2", lineColor1);
             outlineShaderMaterial.SetColor("_LineColor3", lineColor2);
@@ -236,6 +245,10 @@ public class OutlineEffect : MonoBehaviour
                 outlineShaderMaterial.SetInt("_Dark", 1);
             else
                 outlineShaderMaterial.SetInt("_Dark", 0);
+            if(cornerOutlines)
+                outlineShaderMaterial.SetInt("_CornerOutlines", 1);
+            else
+                outlineShaderMaterial.SetInt("_CornerOutlines", 0);
         }
     }
 
