@@ -43,6 +43,7 @@ public class OutlineEffect : MonoBehaviour
     public Color lineColor2 = Color.blue;
     public bool flipY = false;
     public bool additiveRendering = true;
+    public bool addLinesBetweenColors = false;
     public float alphaCutoff = .5f;
 
     Material outline1Material;
@@ -53,6 +54,7 @@ public class OutlineEffect : MonoBehaviour
     Shader outlineBufferShader;
     Material outlineShaderMaterial;
     RenderTexture renderTexture;
+    RenderTexture extraRenderTexture;
 
     Material GetMaterialFromID(int ID)
     {
@@ -99,12 +101,14 @@ public class OutlineEffect : MonoBehaviour
         }
 
 		renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
-		UpdateOutlineCameraFromSource();
+        extraRenderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
+        UpdateOutlineCameraFromSource();
     }
 
     void OnDestroy()
     {
         renderTexture.Release();
+        extraRenderTexture.Release();
         DestroyMaterials();
     }
 
@@ -113,7 +117,8 @@ public class OutlineEffect : MonoBehaviour
 		if(renderTexture.width != sourceCamera.pixelWidth || renderTexture.height != sourceCamera.pixelHeight)
 		{
 			renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
-			outlineCamera.targetTexture = renderTexture;
+            extraRenderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
+            outlineCamera.targetTexture = renderTexture;
 		}
 		UpdateMaterialsPublicProperties();
 		UpdateOutlineCameraFromSource();
@@ -163,15 +168,20 @@ public class OutlineEffect : MonoBehaviour
     void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
         outlineShaderMaterial.SetTexture("_OutlineSource", renderTexture);
-        Graphics.Blit(source, destination, outlineShaderMaterial);
+        if(addLinesBetweenColors)
+        {
+            Graphics.Blit(source, extraRenderTexture, outlineShaderMaterial, 0);
+            outlineShaderMaterial.SetTexture("_OutlineSource", extraRenderTexture);
+        }
+        Graphics.Blit(source, destination, outlineShaderMaterial, 1);
     }
 
     private void CreateMaterialsIfNeeded()
     {
         if (outlineShader == null)
-            outlineShader = Resources.Load<Shader>("OutlineEffect/OutlineShader");
+            outlineShader = Resources.Load<Shader>("OutlineShader");
         if (outlineBufferShader == null)
-            outlineBufferShader = Resources.Load<Shader>("OutlineEffect/OutlineBufferShader");
+            outlineBufferShader = Resources.Load<Shader>("OutlineBufferShader");
         if (outlineShaderMaterial == null)
         {
             outlineShaderMaterial = new Material(outlineShader);

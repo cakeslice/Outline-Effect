@@ -34,6 +34,73 @@ Shader "Hidden/OutlineEffect"
 	{
 		Pass
 		{
+			Tags{ "RenderType" = "Opaque" }
+			LOD 200
+			ZTest Always
+			ZWrite Off
+			Cull Off
+
+			CGPROGRAM
+
+			#pragma vertex vert
+			#pragma fragment frag
+			#pragma target 3.0
+			#include "UnityCG.cginc"
+
+			sampler2D _MainTex;
+			sampler2D _OutlineSource;
+
+			struct v2f
+			{
+				float4 position : SV_POSITION;
+				float2 uv : TEXCOORD0;
+			};
+
+			v2f vert(appdata_img v)
+			{
+				v2f o;
+				o.position = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.uv = v.texcoord;
+
+				return o;
+			}
+
+			float _LineThicknessX;
+			float _LineThicknessY;
+			int _FlipY;
+			uniform float4 _MainTex_TexelSize;
+
+			half4 frag(v2f input) : COLOR
+			{
+				float2 uv = input.uv;
+				if (_FlipY == 1)
+					uv.y = 1 - uv.y;
+
+				//half4 originalPixel = tex2D(_MainTex,input.uv);
+				half4 outlineSource = tex2D(_OutlineSource, uv);
+
+				float h = .95f;
+
+				half4 sample1 = tex2D(_OutlineSource, uv + float2(_LineThicknessX,0.0) * _MainTex_TexelSize.x * 1000.0f);
+				half4 sample2 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX,0.0) * _MainTex_TexelSize.x * 1000.0f);
+				half4 sample3 = tex2D(_OutlineSource, uv + float2(.0,_LineThicknessY) * _MainTex_TexelSize.y * 1000.0f);
+				half4 sample4 = tex2D(_OutlineSource, uv + float2(.0,-_LineThicknessY) * _MainTex_TexelSize.y * 1000.0f);
+
+				bool red = sample1.r > h || sample2.r > h || sample3.r > h || sample4.r > h;
+				bool green = sample1.g > h || sample2.g > h || sample3.g > h || sample4.g > h;
+				bool blue = sample1.b > h || sample2.b > h || sample3.b > h || sample4.b > h;
+				 
+				if ((red && blue) || (green && blue) || (red && green))
+					return float4(0,0,0,0);
+				else
+					return outlineSource;
+			}
+
+			ENDCG
+		}
+
+		Pass
+		{
 			Tags { "RenderType"="Opaque" }
 			LOD 200
 			ZTest Always
