@@ -2,22 +2,21 @@ Outline Effect
 ======================
 Outline Image Effect for Unity
 
-https://gfycat.com/RashGenuineBlackwidowspider
-
-![](http://i.imgur.com/yAKd5Qg.png "Optional title")
+![](http://i.imgur.com/Wsg7K0t.png "Outline Image Effect for Unity")
 
 FEATURES:
 ------------
-MeshRenderer support
+Sprite/Line/Mesh renderer support
+
+HDR support (useful for bloom, etc...)
 
 Alpha cutout option
 
-Merged outline between multiple sprite/line renderers
+Merged outline between multiple renderers (or you can disable it)
 
-Erase option to keep outlines behind specific sprite/line renderers
+Erase option to keep outlines behind specific renderers
 
-Per sprite/line renderer color support (up to three)
-
+Per renderer color support (up to three different colors)
 
 INSTALLATION:
 ------------
