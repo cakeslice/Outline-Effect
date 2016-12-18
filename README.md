@@ -32,10 +32,6 @@ Add "Outline Effect" component to camera
 
 Add "Outline" component to renderers
 
-NOTE:
-------------
-I do not own the Half Life sprite and it's used for demonstration purposes only under fair use.
-
 TWITTER:
 ------------
 [cakeslice_dev](https://twitter.com/cakeslice_dev)

@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 96400161}
   - component: {fileID: 96400163}
   m_Layer: 0
-  m_Name: HL3
+  m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,13 +278,15 @@ MonoBehaviour:
   outlineCamera: {fileID: 0}
   lineThickness: 2
   lineIntensity: 2
+  fillAmount: 0.2
   lineColor0: {r: 1, g: 0, b: 0, a: 1}
   lineColor1: {r: 1, g: 1, b: 1, a: 1}
   lineColor2: {r: 0, g: 0.25720072, b: 1, a: 1}
-  flipY: 0
-  additiveRendering: 0
-  addLinesBetweenColors: 0
   alphaCutoff: 0.5
+  additiveRendering: 0
+  flipY: 0
+  cornerOutlines: 0
+  addLinesBetweenColors: 0
 --- !u!114 &115619429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,7 +361,7 @@ GameObject:
   - component: {fileID: 508253894}
   - component: {fileID: 508253893}
   m_Layer: 0
-  m_Name: HL3
+  m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -424,7 +426,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 508253892}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.52, y: 0.007, z: 1}
+  m_LocalPosition: {x: -1.53, y: 0.3, z: 1}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -968,7 +970,7 @@ GameObject:
   - component: {fileID: 1937169228}
   - component: {fileID: 2049687303}
   m_Layer: 0
-  m_Name: HL3
+  m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
