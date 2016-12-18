@@ -215,7 +215,7 @@ Shader "Hidden/OutlineEffect"
 					{
 						outline = _LineColor2 * _LineIntensity * _LineColor2.a;
 						if (outsideDark)
-							originalPixel *= 1 - _LineColor2.a;
+							originalPixel *= 1- - _LineColor2.a;
 						hasOutline = true;
 					}
 					else if (sample1.b > h || sample2.b > h || sample3.b > h || sample4.b > h)
@@ -232,7 +232,7 @@ Shader "Hidden/OutlineEffect"
 					
 				//return outlineSource;		
 				if (hasOutline)
-					return originalPixel + outline;
+					return lerp(originalPixel + outline, outline, _FillAmount);
 				else
 					return originalPixel;
 			}
