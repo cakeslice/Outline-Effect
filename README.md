@@ -26,11 +26,11 @@ Download the files and open the project OR place the "Assets/OutlineEffect" fold
 
 USAGE:
 ------------
-Add a layer called "Outline"
+Add a layer named "Outline"
 
-Add Outline Effect component to camera
+Add "Outline Effect" component to camera
 
-Add Renderer objects to "Outline Renderers" in the script OR replace the list from your scripts
+Add "Outline" component to renderers
 
 NOTE:
 ------------
