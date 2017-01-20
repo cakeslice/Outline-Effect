@@ -26,8 +26,6 @@ Download the files and open the project OR place the "Assets/OutlineEffect" fold
 
 USAGE:
 ------------
-Add a layer named "Outline"
-
 Add "Outline Effect" component to camera
 
 Add "Outline" component to renderers
