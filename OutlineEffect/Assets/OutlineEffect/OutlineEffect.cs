@@ -50,6 +50,9 @@ public class OutlineEffect : MonoBehaviour
     public float alphaCutoff = .5f;
     public bool additiveRendering = true;
     public bool flipY = false;
+    [Tooltip("Layer index used by the outline camera")]
+    public int outlineLayer = 31;
+
     [Header("These settings can affect performance!")]
     public bool cornerOutlines = false;
     public bool addLinesBetweenColors = false;
@@ -115,8 +118,10 @@ public class OutlineEffect : MonoBehaviour
 
     void OnDestroy()
     {
-        renderTexture.Release();
-        extraRenderTexture.Release();
+        if(renderTexture != null)
+            renderTexture.Release();
+        if(extraRenderTexture != null)
+            extraRenderTexture.Release();
         DestroyMaterials();
     }
 
@@ -150,7 +155,7 @@ public class OutlineEffect : MonoBehaviour
                         outlines[i].GetComponent<Renderer>().sharedMaterial.mainTexture = outlines[i].originalMaterial.mainTexture;
                     }
 
-                    outlines[i].gameObject.layer = LayerMask.NameToLayer("Outline");
+                    outlines[i].gameObject.layer = outlineLayer;
                 }
             }
         }
@@ -256,7 +261,7 @@ public class OutlineEffect : MonoBehaviour
         outlineCamera.renderingPath = RenderingPath.Forward;
         outlineCamera.backgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
         outlineCamera.clearFlags = CameraClearFlags.SolidColor;
-        outlineCamera.cullingMask = LayerMask.GetMask("Outline");
+        outlineCamera.cullingMask = ~outlineLayer;
         outlineCamera.rect = new Rect(0, 0, 1, 1);
 		outlineCamera.enabled = true;
 		outlineCamera.targetTexture = renderTexture;
