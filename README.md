@@ -33,4 +33,5 @@ Add "Outline" component to renderers
 SUPPORT:
 ------------
 [Twitter @cakeslice_dev](https://twitter.com/cakeslice_dev)
-[Unity Forum Thread @cakeslice_dev](https://forum.unity3d.com/threads/free-open-source-outline-image-effect.314362)
+
+[Unity Forum Thread](https://forum.unity3d.com/threads/free-open-source-outline-image-effect.314362)
