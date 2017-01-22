@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: MeshMaterial
+  m_Name: wheel
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
@@ -75,7 +75,7 @@ Material:
       second: 1
     - first:
         name: _Cutoff
-      second: 0.02
+      second: 0.5
     - first:
         name: _DetailNormalMapScale
       second: 1
@@ -93,7 +93,7 @@ Material:
       second: 1
     - first:
         name: _Metallic
-      second: 0
+      second: 1
     - first:
         name: _Mode
       second: 0
@@ -121,7 +121,7 @@ Material:
     m_Colors:
     - first:
         name: _Color
-      second: {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 1}
+      second: {r: 0.77205884, g: 0.77205884, b: 0.77205884, a: 1}
     - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Renderer))]
 public class Outline : MonoBehaviour
@@ -12,7 +13,7 @@ public class Outline : MonoBehaviour
 	[HideInInspector]
 	public int originalLayer;
 	[HideInInspector]
-	public Material originalMaterial;
+	public Material[] originalMaterials;
 
 	void Start()
     {

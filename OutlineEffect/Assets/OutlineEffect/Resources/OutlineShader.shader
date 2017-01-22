@@ -27,7 +27,6 @@ Shader "Hidden/OutlineEffect"
 	Properties 
 	{
 		_MainTex ("Base (RGB)", 2D) = "white" {}
-		_LineColor ("Line Color", Color) = (1,1,1,.5)
 		
 	}
 	SubShader 
@@ -149,6 +148,10 @@ Shader "Hidden/OutlineEffect"
 				float2 uv = input.uv;
 				if (_FlipY == 1)
 					uv.y = 1 - uv.y;
+				#if UNITY_UV_STARTS_AT_TOP
+					if (_MainTex_TexelSize.y < 0)
+						uv.y = 1 - uv.y;
+				#endif
 
 				half4 originalPixel = tex2D(_MainTex,input.uv);
 				half4 outlineSource = tex2D(_OutlineSource, uv);
@@ -164,7 +167,7 @@ Shader "Hidden/OutlineEffect"
 				half4 sample4 = tex2D(_OutlineSource, uv + float2(.0,-_LineThicknessY) * texelSize);
 				
 				bool outside = outlineSource.a < h;
-				bool outsideDark = outlineSource.a < h && _Dark;
+				bool outsideDark = outside && _Dark;
 
 				if (_CornerOutlines)
 				{
@@ -215,7 +218,7 @@ Shader "Hidden/OutlineEffect"
 					{
 						outline = _LineColor2 * _LineIntensity * _LineColor2.a;
 						if (outsideDark)
-							originalPixel *= 1- - _LineColor2.a;
+							originalPixel *= 1 - _LineColor2.a;
 						hasOutline = true;
 					}
 					else if (sample1.b > h || sample2.b > h || sample3.b > h || sample4.b > h)

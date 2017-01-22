@@ -32,9 +32,6 @@ public class OutlineEffect : MonoBehaviour
 {
 	List<Outline> outlines = new List<Outline>();
 
-    public Camera sourceCamera;
-    public Camera outlineCamera;
-
     [Range(0, 4)]
     public float lineThickness = 4f;
     [Range(0, 10)]
@@ -46,16 +43,21 @@ public class OutlineEffect : MonoBehaviour
     public Color lineColor1 = Color.green;
     public Color lineColor2 = Color.blue;
 
-    [Range(0, 1)]
-    public float alphaCutoff = .5f;
     public bool additiveRendering = true;
-    public bool flipY = false;
-    [Tooltip("Layer index used by the outline camera")]
-    public int outlineLayer = 31;
 
     [Header("These settings can affect performance!")]
     public bool cornerOutlines = false;
     public bool addLinesBetweenColors = false;
+
+    [Header("Advanced settings")]
+    public bool scaleWithScreenSize = true;
+    [Range(0.1f, .9f)]
+    public float alphaCutoff = .5f;
+    public bool flipY = false;
+    public Camera sourceCamera;
+    public Camera outlineCamera;
+    [Tooltip("Layer index used by the outline camera")]
+    public int outlineLayer = 31;
 
     Material outline1Material;
     Material outline2Material;
@@ -142,19 +144,28 @@ public class OutlineEffect : MonoBehaviour
             {
                 if (outlines[i] != null)
                 {
-					outlines[i].originalMaterial = outlines[i].GetComponent<Renderer>().sharedMaterial;
+					outlines[i].originalMaterials = outlines[i].GetComponent<Renderer>().sharedMaterials;
+
 					outlines[i].originalLayer = outlines[i].gameObject.layer;
 
-					if(outlines[i].eraseRenderer)
-						outlines[i].GetComponent<Renderer>().sharedMaterial = outlineEraseMaterial;
-					else
-						outlines[i].GetComponent<Renderer>().sharedMaterial = GetMaterialFromID(outlines[i].color);
-
-                    if (outlines[i].GetComponent<Renderer>() is MeshRenderer)
+                    Material[] outlineMaterials = new Material[outlines[i].originalMaterials.Length];
+                    for(int j = 0; j < outlineMaterials.Length; j++)
                     {
-                        outlines[i].GetComponent<Renderer>().sharedMaterial.mainTexture = outlines[i].originalMaterial.mainTexture;
+                        if(outlines[i].eraseRenderer)
+                            outlineMaterials[j] = outlineEraseMaterial;
+                        else
+                            outlineMaterials[j] = GetMaterialFromID(outlines[i].color);
                     }
 
+
+                    outlines[i].GetComponent<Renderer>().sharedMaterials = outlineMaterials;
+
+                    for(int m = 0; m < outlines[i].GetComponent<Renderer>().materials.Length; m++)
+                    {
+                        if(outlines[i].GetComponent<Renderer>() is MeshRenderer)
+                            outlines[i].GetComponent<Renderer>().materials[m].mainTexture = outlines[i].originalMaterials[m].mainTexture;  
+                    }
+           
                     outlines[i].gameObject.layer = outlineLayer;
                 }
             }
@@ -168,11 +179,17 @@ public class OutlineEffect : MonoBehaviour
             {
                 if (outlines[i] != null)
                 {
-                    if (outlines[i].GetComponent<Renderer>() is MeshRenderer)
-						outlines[i].GetComponent<Renderer>().sharedMaterial.mainTexture = null;
+                    for(int m = 0; m < outlines[i].GetComponent<Renderer>().sharedMaterials.Length; m++)
+                    {
+                        if(outlines[i].GetComponent<Renderer>() is MeshRenderer)
+                        {                    
+                            outlines[i].GetComponent<Renderer>().sharedMaterials[m].mainTexture = null;
+                        }
+                    }
 
-					outlines[i].GetComponent<Renderer>().sharedMaterial = outlines[i].originalMaterial;
-					outlines[i].gameObject.layer = outlines[i].originalLayer;
+                    outlines[i].GetComponent<Renderer>().sharedMaterials = outlines[i].originalMaterials;
+
+                    outlines[i].gameObject.layer = outlines[i].originalLayer;
                 }
             }
         }
@@ -227,17 +244,21 @@ public class OutlineEffect : MonoBehaviour
         outline3Material = null;
     }
 
-    private void UpdateMaterialsPublicProperties()
+    public void UpdateMaterialsPublicProperties()
     {
         if (outlineShaderMaterial)
         {
-            outlineShaderMaterial.SetFloat("_LineThicknessX", lineThickness / 1000);
-            outlineShaderMaterial.SetFloat("_LineThicknessY", lineThickness / 1000);
+            float scalingFactor = 1;
+            if(scaleWithScreenSize)
+                scalingFactor = Screen.width / 720.0f;
+
+            outlineShaderMaterial.SetFloat("_LineThicknessX", scalingFactor * (lineThickness / 1000));
+            outlineShaderMaterial.SetFloat("_LineThicknessY", scalingFactor * (lineThickness / 1000));
             outlineShaderMaterial.SetFloat("_LineIntensity", lineIntensity);
             outlineShaderMaterial.SetFloat("_FillAmount", fillAmount);
-            outlineShaderMaterial.SetColor("_LineColor1", lineColor0);
-            outlineShaderMaterial.SetColor("_LineColor2", lineColor1);
-            outlineShaderMaterial.SetColor("_LineColor3", lineColor2);
+            outlineShaderMaterial.SetColor("_LineColor1", lineColor0 * lineColor0);
+            outlineShaderMaterial.SetColor("_LineColor2", lineColor1 * lineColor1);
+            outlineShaderMaterial.SetColor("_LineColor3", lineColor2 * lineColor2);
             if (flipY)
                 outlineShaderMaterial.SetInt("_FlipY", 1);
             else
