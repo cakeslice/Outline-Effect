@@ -2,7 +2,7 @@ Outline Effect
 ======================
 Outline Image Effect for Unity
 
-![](http://i.imgur.com/Wsg7K0t.png "Outline Image Effect for Unity")
+![](http://i.imgur.com/CuUDPyk.jpg "Outline Image Effect for Unity")
 
 FEATURES:
 ------------
