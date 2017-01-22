@@ -30,6 +30,7 @@ Add "Outline Effect" component to camera
 
 Add "Outline" component to renderers
 
-TWITTER:
+SUPPORT:
 ------------
-[cakeslice_dev](https://twitter.com/cakeslice_dev)
+[Twitter @cakeslice_dev](https://twitter.com/cakeslice_dev)
+[Unity Forum Thread @cakeslice_dev](https://forum.unity3d.com/threads/free-open-source-outline-image-effect.314362)
