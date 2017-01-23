@@ -74,6 +74,10 @@ Shader "Hidden/OutlineEffect"
 				float2 uv = input.uv;
 				if (_FlipY == 1)
 					uv.y = 1 - uv.y;
+				#if UNITY_UV_STARTS_AT_TOP
+				if (_MainTex_TexelSize.y < 0)
+					uv.y = 1 - uv.y;
+				#endif
 
 				//half4 originalPixel = tex2D(_MainTex,input.uv);
 				half4 outlineSource = tex2D(_OutlineSource, uv);
