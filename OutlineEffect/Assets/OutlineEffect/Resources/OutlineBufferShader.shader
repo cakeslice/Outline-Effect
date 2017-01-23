@@ -43,7 +43,7 @@ Shader "Hidden/OutlineBufferEffect" {
 
 		Cull Off
 		Lighting Off
-		ZWrite Off
+		//ZWrite Off
 		Blend One OneMinusSrcAlpha
 
 		CGPROGRAM
