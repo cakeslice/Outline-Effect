@@ -162,7 +162,8 @@ namespace cakeslice
             {
                 for(int i = 0; i < outlines.Count; i++)
                 {
-                    if(outlines[i] != null)
+                    LayerMask l = sourceCamera.cullingMask;
+                    if(outlines[i] != null && l == (l | (1 << outlines[i].originalLayer)))
                     {
                         outlines[i].originalMaterials = outlines[i].Renderer.sharedMaterials;
 
@@ -197,7 +198,8 @@ namespace cakeslice
             {
                 for(int i = 0; i < outlines.Count; i++)
                 {
-                    if(outlines[i] != null)
+                    LayerMask l = sourceCamera.cullingMask;
+                    if(outlines[i] != null && l == (l | (1 << outlines[i].originalLayer)))
                     {
                         for(int m = 0; m < outlines[i].Renderer.sharedMaterials.Length; m++)
                         {
