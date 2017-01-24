@@ -23,14 +23,26 @@
 */
 
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 [RequireComponent(typeof(Camera))]
 public class OutlineEffect : MonoBehaviour
 {
-	List<Outline> outlines = new List<Outline>();
+    private static OutlineEffect m_instance;
+    public static OutlineEffect Instance
+    {
+        get
+        {
+            if (Equals(m_instance, null)) {
+                return m_instance = FindObjectOfType(typeof(OutlineEffect)) as OutlineEffect;
+            }
+
+            return m_instance;
+        }
+    }
+    private OutlineEffect() {}
+
+    private readonly List<Outline> outlines = new List<Outline>();
 
     [Range(0, 4)]
     public float lineThickness = 4f;
@@ -93,6 +105,11 @@ public class OutlineEffect : MonoBehaviour
         return m;
     }
 
+    private void Awake()
+    {
+        m_instance = this;
+    }
+
     void Start()
     {
         CreateMaterialsIfNeeded();
@@ -144,7 +161,7 @@ public class OutlineEffect : MonoBehaviour
             {
                 if (outlines[i] != null)
                 {
-					outlines[i].originalMaterials = outlines[i].GetComponent<Renderer>().sharedMaterials;
+					outlines[i].originalMaterials = outlines[i].Renderer.sharedMaterials;
 
 					outlines[i].originalLayer = outlines[i].gameObject.layer;
 
@@ -158,12 +175,12 @@ public class OutlineEffect : MonoBehaviour
                     }
 
 
-                    outlines[i].GetComponent<Renderer>().sharedMaterials = outlineMaterials;
+                    outlines[i].Renderer.sharedMaterials = outlineMaterials;
 
-                    for(int m = 0; m < outlines[i].GetComponent<Renderer>().materials.Length; m++)
+                    for(int m = 0; m < outlines[i].Renderer.materials.Length; m++)
                     {
-                        if(outlines[i].GetComponent<Renderer>() is MeshRenderer)
-                            outlines[i].GetComponent<Renderer>().materials[m].mainTexture = outlines[i].originalMaterials[m].mainTexture;  
+                        if(outlines[i].Renderer is MeshRenderer)
+                            outlines[i].Renderer.materials[m].mainTexture = outlines[i].originalMaterials[m].mainTexture;  
                     }
            
                     outlines[i].gameObject.layer = outlineLayer;
@@ -179,15 +196,15 @@ public class OutlineEffect : MonoBehaviour
             {
                 if (outlines[i] != null)
                 {
-                    for(int m = 0; m < outlines[i].GetComponent<Renderer>().sharedMaterials.Length; m++)
+                    for(int m = 0; m < outlines[i].Renderer.sharedMaterials.Length; m++)
                     {
-                        if(outlines[i].GetComponent<Renderer>() is MeshRenderer)
+                        if(outlines[i].Renderer is MeshRenderer)
                         {                    
-                            outlines[i].GetComponent<Renderer>().sharedMaterials[m].mainTexture = null;
+                            outlines[i].Renderer.sharedMaterials[m].mainTexture = null;
                         }
                     }
 
-                    outlines[i].GetComponent<Renderer>().sharedMaterials = outlines[i].originalMaterials;
+                    outlines[i].Renderer.sharedMaterials = outlines[i].originalMaterials;
 
                     outlines[i].gameObject.layer = outlines[i].originalLayer;
                 }
@@ -296,8 +313,8 @@ public class OutlineEffect : MonoBehaviour
         }
     }
     public void RemoveOutline(Outline outline)
-	{
-		outlines.Remove(outline);
+    {
+        outlines.Remove(outline);
     }
 
 }

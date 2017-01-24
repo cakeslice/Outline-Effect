@@ -1,33 +1,30 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(Renderer))]
 public class Outline : MonoBehaviour
 {
-    public OutlineEffect outlineEffect;
+    public Renderer Renderer { get; private set; }
 
-	public int color;
+    public int color;
 	public bool eraseRenderer;
-
-	[HideInInspector]
+    
+    [HideInInspector]
 	public int originalLayer;
 	[HideInInspector]
 	public Material[] originalMaterials;
-
-	void Start()
+    
+    private void Awake()
     {
+        Renderer = GetComponent<Renderer>();
     }
 
     void OnEnable()
     {
-		if(outlineEffect == null)
-			outlineEffect = Camera.main.GetComponent<OutlineEffect>();
-		outlineEffect.AddOutline(this);
+        OutlineEffect.Instance.AddOutline(this);
     }
 
     void OnDisable()
     {
-        outlineEffect.RemoveOutline(this);
+        OutlineEffect.Instance.RemoveOutline(this);
     }
 }
