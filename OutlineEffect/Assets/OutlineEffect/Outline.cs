@@ -1,30 +1,33 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Renderer))]
-public class Outline : MonoBehaviour
+namespace cakeslice
 {
-    public Renderer Renderer { get; private set; }
-
-    public int color;
-	public bool eraseRenderer;
-    
-    [HideInInspector]
-	public int originalLayer;
-	[HideInInspector]
-	public Material[] originalMaterials;
-    
-    private void Awake()
+    [RequireComponent(typeof(Renderer))]
+    public class Outline : MonoBehaviour
     {
-        Renderer = GetComponent<Renderer>();
-    }
+        public Renderer Renderer { get; private set; }
 
-    void OnEnable()
-    {
-        OutlineEffect.Instance.AddOutline(this);
-    }
+        public int color;
+        public bool eraseRenderer;
 
-    void OnDisable()
-    {
-        OutlineEffect.Instance.RemoveOutline(this);
+        [HideInInspector]
+        public int originalLayer;
+        [HideInInspector]
+        public Material[] originalMaterials;
+
+        private void Awake()
+        {
+            Renderer = GetComponent<Renderer>();
+        }
+
+        void OnEnable()
+        {
+            OutlineEffect.Instance.AddOutline(this);
+        }
+
+        void OnDisable()
+        {
+            OutlineEffect.Instance.RemoveOutline(this);
+        }
     }
 }
