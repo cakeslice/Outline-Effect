@@ -268,8 +268,8 @@ MonoBehaviour:
   alphaCutoff: 0.5
   flipY: 0
   sourceCamera: {fileID: 0}
-  outlineCamera: {fileID: 0}
   outlineLayer: 31
+  outlineCamera: {fileID: 0}
 --- !u!114 &115619429
 MonoBehaviour:
   m_ObjectHideFlags: 0

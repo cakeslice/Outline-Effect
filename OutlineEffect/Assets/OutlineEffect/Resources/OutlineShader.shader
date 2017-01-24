@@ -83,12 +83,11 @@ Shader "Hidden/OutlineEffect"
 				half4 outlineSource = tex2D(_OutlineSource, uv);
 
 				const float h = .95f;
-				float2 texelSize = _MainTex_TexelSize * 1000.0f;
 
-				half4 sample1 = tex2D(_OutlineSource, uv + float2(_LineThicknessX,0.0) * texelSize);
-				half4 sample2 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX,0.0) * texelSize);
-				half4 sample3 = tex2D(_OutlineSource, uv + float2(.0,_LineThicknessY) * texelSize);
-				half4 sample4 = tex2D(_OutlineSource, uv + float2(.0,-_LineThicknessY) * texelSize);
+				half4 sample1 = tex2D(_OutlineSource, uv + float2(_LineThicknessX,0.0));
+				half4 sample2 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX,0.0));
+				half4 sample3 = tex2D(_OutlineSource, uv + float2(.0,_LineThicknessY));
+				half4 sample4 = tex2D(_OutlineSource, uv + float2(.0,-_LineThicknessY));
 
 				bool red = sample1.r > h || sample2.r > h || sample3.r > h || sample4.r > h;
 				bool green = sample1.g > h || sample2.g > h || sample3.g > h || sample4.g > h;
@@ -163,12 +162,11 @@ Shader "Hidden/OutlineEffect"
 				const float h = .95f;
 				half4 outline = 0;
 				bool hasOutline = false;
-				float2 texelSize = _MainTex_TexelSize * 1000.0f;
 
-				half4 sample1 = tex2D(_OutlineSource, uv + float2(_LineThicknessX,0.0) * texelSize);
-				half4 sample2 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX,0.0) * texelSize);
-				half4 sample3 = tex2D(_OutlineSource, uv + float2(.0,_LineThicknessY) * texelSize);
-				half4 sample4 = tex2D(_OutlineSource, uv + float2(.0,-_LineThicknessY) * texelSize);
+				half4 sample1 = tex2D(_OutlineSource, uv + float2(_LineThicknessX,0.0));
+				half4 sample2 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX,0.0));
+				half4 sample3 = tex2D(_OutlineSource, uv + float2(.0,_LineThicknessY));
+				half4 sample4 = tex2D(_OutlineSource, uv + float2(.0,-_LineThicknessY));
 				
 				bool outside = outlineSource.a < h;
 				bool outsideDark = outside && _Dark;
@@ -176,10 +174,10 @@ Shader "Hidden/OutlineEffect"
 				if (_CornerOutlines)
 				{
 					// TODO: Conditional compile
-					half4 sample5 = tex2D(_OutlineSource, uv + float2(_LineThicknessX, _LineThicknessY) * texelSize);
-					half4 sample6 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX, -_LineThicknessY) * texelSize);
-					half4 sample7 = tex2D(_OutlineSource, uv + float2(_LineThicknessX, -_LineThicknessY) * texelSize);
-					half4 sample8 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX, _LineThicknessY) * texelSize);
+					half4 sample5 = tex2D(_OutlineSource, uv + float2(_LineThicknessX, _LineThicknessY));
+					half4 sample6 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX, -_LineThicknessY));
+					half4 sample7 = tex2D(_OutlineSource, uv + float2(_LineThicknessX, -_LineThicknessY));
+					half4 sample8 = tex2D(_OutlineSource, uv + float2(-_LineThicknessX, _LineThicknessY));
 
 					if (sample1.r > h || sample2.r > h || sample3.r > h || sample4.r > h ||
 						sample5.r > h || sample6.r > h || sample7.r > h || sample8.r > h)
