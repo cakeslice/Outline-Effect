@@ -48,7 +48,7 @@ namespace cakeslice
 
         private readonly List<Outline> outlines = new List<Outline>();
 
-        [Range(0, 4)]
+        [Range(1.0f, 6.0f)]
         public float lineThickness = 1.25f;
         [Range(0, 10)]
         public float lineIntensity = .5f;
@@ -272,16 +272,24 @@ namespace cakeslice
         {
             if(outlineShaderMaterial)
             {
-                float scalingFactorX = (1.0f / Screen.width) * 1000.0f;
-                float scalingFactorY = (1.0f / Screen.height) * 1000.0f;
+                float scalingFactor = 1;
                 if(scaleWithScreenSize)
                 {
-                    scalingFactorX = Screen.width / 640.0f;
-                    scalingFactorY = Screen.width / ((Screen.height * 640.0f) / Screen.width);
+                    // If Screen.height gets bigger, outlines gets thicker
+                    scalingFactor = Screen.height / 360.0f;
                 }
 
-                outlineShaderMaterial.SetFloat("_LineThicknessX", scalingFactorX * (lineThickness / 1000));
-                outlineShaderMaterial.SetFloat("_LineThicknessY", scalingFactorY * (lineThickness / 1000));
+                // If scaling is too small (height less than 360 pixels), make sure you still render the outlines, but render them with 1 thickness
+                if(scaleWithScreenSize && scalingFactor < 1)
+                {
+                    outlineShaderMaterial.SetFloat("_LineThicknessX", (1 / 1000.0f) * (1.0f / Screen.width) * 1000.0f);
+                    outlineShaderMaterial.SetFloat("_LineThicknessY", (1 / 1000.0f) * (1.0f / Screen.height) * 1000.0f);
+                }
+                else
+                {
+                    outlineShaderMaterial.SetFloat("_LineThicknessX", scalingFactor * (lineThickness / 1000.0f) * (1.0f / Screen.width) * 1000.0f);
+                    outlineShaderMaterial.SetFloat("_LineThicknessY", scalingFactor * (lineThickness / 1000.0f) * (1.0f / Screen.height) * 1000.0f);
+                }
                 outlineShaderMaterial.SetFloat("_LineIntensity", lineIntensity);
                 outlineShaderMaterial.SetFloat("_FillAmount", fillAmount);
                 outlineShaderMaterial.SetColor("_LineColor1", lineColor0 * lineColor0);
