@@ -151,6 +151,8 @@ namespace cakeslice
 
         void OnPreCull()
         {
+            outlineCamera.cullingMask = ~outlineLayer;
+
             if(renderTexture.width != sourceCamera.pixelWidth || renderTexture.height != sourceCamera.pixelHeight)
             {
                 renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
@@ -318,7 +320,6 @@ namespace cakeslice
             outlineCamera.renderingPath = RenderingPath.Forward;
             outlineCamera.backgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
             outlineCamera.clearFlags = CameraClearFlags.SolidColor;
-            outlineCamera.cullingMask = ~outlineLayer;
             outlineCamera.rect = new Rect(0, 0, 1, 1);
             outlineCamera.enabled = true;
             outlineCamera.targetTexture = renderTexture;
