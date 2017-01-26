@@ -319,7 +319,7 @@ namespace cakeslice
             outlineCamera.clearFlags = CameraClearFlags.SolidColor;
             outlineCamera.rect = new Rect(0, 0, 1, 1);
             outlineCamera.enabled = true;
-            outlineCamera.cullingMask = ~5; // UI layer
+            outlineCamera.cullingMask = 1 << 5; // UI layer
             outlineCamera.targetTexture = renderTexture;
         }
 

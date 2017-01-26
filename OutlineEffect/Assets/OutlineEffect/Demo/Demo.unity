@@ -268,7 +268,6 @@ MonoBehaviour:
   alphaCutoff: 0.5
   flipY: 0
   sourceCamera: {fileID: 0}
-  outlineLayer: 31
   outlineCamera: {fileID: 0}
 --- !u!114 &115619429
 MonoBehaviour:
@@ -1507,7 +1506,7 @@ GameObject:
   - component: {fileID: 2074933620}
   - component: {fileID: 2074933619}
   - component: {fileID: 2074933622}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Cube.012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
