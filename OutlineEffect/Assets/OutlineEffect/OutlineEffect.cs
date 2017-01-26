@@ -71,8 +71,6 @@ namespace cakeslice
         public float alphaCutoff = .5f;
         public bool flipY = false;
         public Camera sourceCamera;
-        [Tooltip("Layer index used by the outline camera")]
-        public int outlineLayer = 31;
 
         [HideInInspector]
         public Camera outlineCamera;
@@ -151,8 +149,6 @@ namespace cakeslice
 
         void OnPreCull()
         {
-            outlineCamera.cullingMask = ~outlineLayer;
-
             if(renderTexture.width != sourceCamera.pixelWidth || renderTexture.height != sourceCamera.pixelHeight)
             {
                 renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
@@ -191,7 +187,7 @@ namespace cakeslice
                                 outlines[i].Renderer.materials[m].mainTexture = outlines[i].originalMaterials[m].mainTexture;
                         }
 
-                        outlines[i].gameObject.layer = outlineLayer;
+                        outlines[i].gameObject.layer = 5;
                     }
                 }
             }
@@ -224,6 +220,7 @@ namespace cakeslice
         void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
             outlineShaderMaterial.SetTexture("_OutlineSource", renderTexture);
+ 
             if(addLinesBetweenColors)
             {
                 Graphics.Blit(source, extraRenderTexture, outlineShaderMaterial, 0);
@@ -322,6 +319,7 @@ namespace cakeslice
             outlineCamera.clearFlags = CameraClearFlags.SolidColor;
             outlineCamera.rect = new Rect(0, 0, 1, 1);
             outlineCamera.enabled = true;
+            outlineCamera.cullingMask = ~5; // UI layer
             outlineCamera.targetTexture = renderTexture;
         }
 
