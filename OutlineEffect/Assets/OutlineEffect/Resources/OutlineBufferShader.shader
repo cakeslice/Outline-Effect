@@ -34,7 +34,6 @@ Shader "Hidden/OutlineBufferEffect" {
 	{
 		Tags
 		{ 
-			"RenderType" = "Outline" 
 			"Queue"="Transparent" 
 			"IgnoreProjector"="True" 
 			"RenderType"="Transparent" 

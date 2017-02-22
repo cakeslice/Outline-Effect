@@ -47,6 +47,7 @@ namespace cakeslice
         private OutlineEffect() { }
 
         private readonly List<Outline> outlines = new List<Outline>();
+        private const int outlineLayer = 6;
 
         [Range(1.0f, 6.0f)]
         public float lineThickness = 1.25f;
@@ -187,7 +188,7 @@ namespace cakeslice
                                 outlines[i].Renderer.materials[m].mainTexture = outlines[i].originalMaterials[m].mainTexture;
                         }
 
-                        outlines[i].gameObject.layer = 5;
+                        outlines[i].gameObject.layer = outlineLayer;
                     }
                 }
             }
@@ -319,7 +320,7 @@ namespace cakeslice
             outlineCamera.clearFlags = CameraClearFlags.SolidColor;
             outlineCamera.rect = new Rect(0, 0, 1, 1);
             outlineCamera.enabled = true;
-            outlineCamera.cullingMask = 1 << 5; // UI layer
+            outlineCamera.cullingMask = 1 << outlineLayer; // UI layer
             outlineCamera.targetTexture = renderTexture;
         }
 
