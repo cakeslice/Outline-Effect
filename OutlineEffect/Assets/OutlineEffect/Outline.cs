@@ -46,12 +46,22 @@ namespace cakeslice
 
         void OnEnable()
         {
-            OutlineEffect.Instance.AddOutline(this);
+            Object[] cameras = GameObject.FindObjectsOfType(typeof(OutlineEffect));
+            foreach(Object c in cameras)
+            {
+                OutlineEffect effect = c as OutlineEffect;
+                effect.AddOutline(this);
+            }
         }
 
         void OnDisable()
         {
-            OutlineEffect.Instance.RemoveOutline(this);
+            Object[] cameras = GameObject.FindObjectsOfType(typeof(OutlineEffect));
+            foreach(Object c in cameras)
+            {
+                OutlineEffect effect = c as OutlineEffect;
+                effect.RemoveOutline(this);
+            }
         }
     }
 }
