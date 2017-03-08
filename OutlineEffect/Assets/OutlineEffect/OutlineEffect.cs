@@ -185,7 +185,7 @@ namespace cakeslice
                         for(int m = 0; m < outlines[i].Renderer.materials.Length; m++)
                         {
                             if(outlines[i].Renderer is MeshRenderer)
-                                outlines[i].Renderer.materials[m].mainTexture = outlines[i].originalMaterials[m].mainTexture;
+                                outlines[i].Renderer.sharedMaterials[m].mainTexture = outlines[i].originalMaterials[m].mainTexture;
                         }
 
                         outlines[i].gameObject.layer = outlineLayer;
