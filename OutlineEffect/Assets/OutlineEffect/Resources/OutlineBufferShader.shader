@@ -41,7 +41,7 @@ Shader "Hidden/OutlineBufferEffect" {
 			"CanUseSpriteAtlas"="True"
 		}
 
-		Cull Off
+		//Cull Off
 		Lighting Off
 		//ZWrite Off
 		Blend One OneMinusSrcAlpha

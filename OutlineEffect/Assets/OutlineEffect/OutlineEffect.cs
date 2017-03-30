@@ -84,15 +84,20 @@ namespace cakeslice
         Material outlineShaderMaterial;
         RenderTexture renderTexture;
         RenderTexture extraRenderTexture;
+        
+        Material[] outline1MaterialBuffer = new Material[20];
+        Material[] outline2MaterialBuffer = new Material[20];
+        Material[] outline3MaterialBuffer = new Material[20];
+        Material[] eraseMaterialBuffer = new Material[20];
 
-        Material GetMaterialFromID(int ID)
+        Material[] GetMaterialBufferFromID(int ID)
         {
             if(ID == 0)
-                return outline1Material;
+                return outline1MaterialBuffer;
             else if(ID == 1)
-                return outline2Material;
+                return outline2MaterialBuffer;
             else
-                return outline3Material;
+                return outline3MaterialBuffer;
         }
 
         Material CreateMaterial(Color emissionColor)
@@ -172,22 +177,15 @@ namespace cakeslice
 
                         outline.originalLayer = outline.gameObject.layer;
 
-                        Material[] outlineMaterials = new Material[outline.originalMaterials.Length];
-                        for(int j = 0; j < outlineMaterials.Length; j++)
+						if(outline.eraseRenderer)
+							outline.Renderer.sharedMaterials = eraseMaterialBuffer;
+                        else
+							outline.Renderer.sharedMaterials = GetMaterialBufferFromID(outline.color);
+
+						for(int m = 0; m < outline.originalMaterials.Length; m++)
                         {
-                            if(outline.eraseRenderer)
-                                outlineMaterials[j] = outlineEraseMaterial;
-                            else
-                                outlineMaterials[j] = GetMaterialFromID(outline.color);
-                        }
-
-
-                        outline.Renderer.sharedMaterials = outlineMaterials;
-
-                        for(int m = 0; m < outline.Renderer.materials.Length; m++)
-                        {
-                            if(outline.Renderer is MeshRenderer)
-                                outline.Renderer.materials[m].mainTexture = outline.originalMaterials[m].mainTexture;
+							if(outline.Renderer is MeshRenderer)
+								outline.Renderer.sharedMaterials[m].mainTexture = outline.originalMaterials[m].mainTexture;
                         }
 
                         outline.gameObject.layer = outlineLayer;
@@ -252,6 +250,23 @@ namespace cakeslice
                 outline2Material = CreateMaterial(new Color(0, 1, 0, 0));
             if(outline3Material == null)
                 outline3Material = CreateMaterial(new Color(0, 0, 1, 0));
+
+            for(int i = 0; i < outline1MaterialBuffer.Length; i++)
+            {
+                outline1MaterialBuffer[i] = outline1Material;
+            }
+            for(int i = 0; i < outline2MaterialBuffer.Length; i++)
+            {
+                outline2MaterialBuffer[i] = outline2Material;
+            }
+            for(int i = 0; i < outline3MaterialBuffer.Length; i++)
+            {
+                outline3MaterialBuffer[i] = outline3Material;
+            }
+            for(int i = 0; i < eraseMaterialBuffer.Length; i++)
+            {
+                eraseMaterialBuffer[i] = outlineEraseMaterial;
+            }
         }
 
         private void DestroyMaterials()
