@@ -16,7 +16,6 @@ namespace cakeslice
 			dictionary = new Dictionary<T, LinkedListNode<T>>();
 		}
 
-
 		public LinkedSet(IEqualityComparer<T> comparer)
 		{
 			list = new LinkedList<T>();

@@ -328,10 +328,7 @@ namespace cakeslice
 
         public void AddOutline(Outline outline)
         {
-            if(!outlines.Contains(outline))
-            {
-                outlines.Add(outline);
-            }
+			outlines.Add(outline);
         }
 
         public void RemoveOutline(Outline outline)
