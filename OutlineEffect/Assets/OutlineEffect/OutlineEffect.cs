@@ -46,7 +46,7 @@ namespace cakeslice
         }
         private OutlineEffect() { }
 
-        private readonly List<Outline> outlines = new List<Outline>();
+		private readonly LinkedSet<Outline> outlines = new LinkedSet<Outline>();
         private const int outlineLayer = 6;
 
         [Range(1.0f, 6.0f)]
@@ -161,34 +161,36 @@ namespace cakeslice
 
             if(outlines != null)
             {
-                for(int i = 0; i < outlines.Count; i++)
+                foreach (Outline outline in outlines)
                 {
+
                     LayerMask l = sourceCamera.cullingMask;
-                    if(outlines[i] != null && l == (l | (1 << outlines[i].originalLayer)))
+
+                    if(outline != null && l == (l | (1 << outline.originalLayer)))
                     {
-                        outlines[i].originalMaterials = outlines[i].Renderer.sharedMaterials;
+                        outline.originalMaterials = outline.Renderer.sharedMaterials;
 
-                        outlines[i].originalLayer = outlines[i].gameObject.layer;
+                        outline.originalLayer = outline.gameObject.layer;
 
-                        Material[] outlineMaterials = new Material[outlines[i].originalMaterials.Length];
+                        Material[] outlineMaterials = new Material[outline.originalMaterials.Length];
                         for(int j = 0; j < outlineMaterials.Length; j++)
                         {
-                            if(outlines[i].eraseRenderer)
+                            if(outline.eraseRenderer)
                                 outlineMaterials[j] = outlineEraseMaterial;
                             else
-                                outlineMaterials[j] = GetMaterialFromID(outlines[i].color);
+                                outlineMaterials[j] = GetMaterialFromID(outline.color);
                         }
 
 
-                        outlines[i].Renderer.sharedMaterials = outlineMaterials;
+                        outline.Renderer.sharedMaterials = outlineMaterials;
 
-                        for(int m = 0; m < outlines[i].Renderer.materials.Length; m++)
+                        for(int m = 0; m < outline.Renderer.materials.Length; m++)
                         {
-                            if(outlines[i].Renderer is MeshRenderer)
-                                outlines[i].Renderer.materials[m].mainTexture = outlines[i].originalMaterials[m].mainTexture;
+                            if(outline.Renderer is MeshRenderer)
+                                outline.Renderer.materials[m].mainTexture = outline.originalMaterials[m].mainTexture;
                         }
 
-                        outlines[i].gameObject.layer = outlineLayer;
+                        outline.gameObject.layer = outlineLayer;
                     }
                 }
             }
@@ -197,22 +199,22 @@ namespace cakeslice
 
             if(outlines != null)
             {
-                for(int i = 0; i < outlines.Count; i++)
+				foreach (Outline outline in outlines)
                 {
                     LayerMask l = sourceCamera.cullingMask;
-                    if(outlines[i] != null && l == (l | (1 << outlines[i].originalLayer)))
+                    if(outline != null && l == (l | (1 << outline.originalLayer)))
                     {
-                        for(int m = 0; m < outlines[i].Renderer.sharedMaterials.Length; m++)
+                        for(int m = 0; m < outline.Renderer.sharedMaterials.Length; m++)
                         {
-                            if(outlines[i].Renderer is MeshRenderer)
+                            if(outline.Renderer is MeshRenderer)
                             {
-                                outlines[i].Renderer.sharedMaterials[m].mainTexture = null;
+                                outline.Renderer.sharedMaterials[m].mainTexture = null;
                             }
                         }
 
-                        outlines[i].Renderer.sharedMaterials = outlines[i].originalMaterials;
+                        outline.Renderer.sharedMaterials = outline.originalMaterials;
 
-                        outlines[i].gameObject.layer = outlines[i].originalLayer;
+                        outline.gameObject.layer = outline.originalLayer;
                     }
                 }
             }
@@ -331,9 +333,11 @@ namespace cakeslice
                 outlines.Add(outline);
             }
         }
+
         public void RemoveOutline(Outline outline)
         {
             outlines.Remove(outline);
         }
+
     }
 }
