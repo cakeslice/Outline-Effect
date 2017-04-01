@@ -153,7 +153,7 @@ namespace cakeslice
             DestroyMaterials();
         }
 
-        void OnPreCull()
+        void OnPreRender()
         {
             if(renderTexture.width != sourceCamera.pixelWidth || renderTexture.height != sourceCamera.pixelHeight)
             {

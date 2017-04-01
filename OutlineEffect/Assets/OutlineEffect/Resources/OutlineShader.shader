@@ -47,6 +47,7 @@ Shader "Hidden/OutlineEffect"
 			#include "UnityCG.cginc"
 
 			sampler2D _MainTex;
+			float4 _MainTex_ST;
 			sampler2D _OutlineSource;
 
 			struct v2f
@@ -118,6 +119,7 @@ Shader "Hidden/OutlineEffect"
 			#include "UnityCG.cginc"
 
 			sampler2D _MainTex;
+			float4 _MainTex_ST;
 			sampler2D _OutlineSource;
 
 			struct v2f {
@@ -156,7 +158,7 @@ Shader "Hidden/OutlineEffect"
 						uv.y = 1 - uv.y;
 				#endif
 
-				half4 originalPixel = tex2D(_MainTex,input.uv);
+				half4 originalPixel = tex2D(_MainTex, input.uv);
 				half4 outlineSource = tex2D(_OutlineSource, uv);
 								
 				const float h = .95f;
