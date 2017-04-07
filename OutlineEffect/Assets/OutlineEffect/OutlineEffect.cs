@@ -60,6 +60,8 @@ namespace cakeslice
         public Color lineColor1 = Color.green;
         public Color lineColor2 = Color.blue;
 
+        public bool backfaceCulling = true;
+
         public bool additiveRendering = false;
 
         [Header("These settings can affect performance!")]
@@ -235,7 +237,12 @@ namespace cakeslice
             if(outlineShader == null)
                 outlineShader = Resources.Load<Shader>("OutlineShader");
             if(outlineBufferShader == null)
-                outlineBufferShader = Resources.Load<Shader>("OutlineBufferShader");
+            {
+                if(backfaceCulling)
+                    outlineBufferShader = Resources.Load<Shader>("OutlineBufferShader");
+                else
+                    outlineBufferShader = Resources.Load<Shader>("OutlineBufferCullOffShader");
+            }
             if(outlineShaderMaterial == null)
             {
                 outlineShaderMaterial = new Material(outlineShader);
