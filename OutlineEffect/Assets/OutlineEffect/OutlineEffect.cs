@@ -146,6 +146,17 @@ namespace cakeslice
             UpdateOutlineCameraFromSource();
         }
 
+        private void OnEnable()
+        {
+            Outline[] o = FindObjectsOfType<Outline>();
+
+            foreach(Outline oL in o)
+            {
+                oL.enabled = false;
+                oL.enabled = true;
+            }
+        }
+
         void OnDestroy()
         {
             if(renderTexture != null)
@@ -350,12 +361,14 @@ namespace cakeslice
 
         public void AddOutline(Outline outline)
         {
-			outlines.Add(outline);
+            if(!outlines.Contains(outline))
+			    outlines.Add(outline);
         }
 
         public void RemoveOutline(Outline outline)
         {
-            outlines.Remove(outline);
+            if(outlines.Contains(outline))
+                outlines.Remove(outline);
         }
 
     }
