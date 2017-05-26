@@ -60,9 +60,10 @@ namespace cakeslice
         public Color lineColor1 = Color.green;
         public Color lineColor2 = Color.blue;
 
-        public bool backfaceCulling = true;
-
         public bool additiveRendering = false;
+
+        [Header("This needs to be set before you hit play!")]
+        public bool backfaceCulling = true;
 
         [Header("These settings can affect performance!")]
         public bool cornerOutlines = false;
@@ -370,6 +371,5 @@ namespace cakeslice
             if(outlines.Contains(outline))
                 outlines.Remove(outline);
         }
-
     }
 }
