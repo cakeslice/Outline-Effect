@@ -44,7 +44,7 @@ Shader "Hidden/OutlineBufferCullOffEffect" {
 		Cull Off
 		Lighting Off
 		//ZWrite Off
-		Blend One OneMinusSrcAlpha
+		//Blend One OneMinusSrcAlpha
 
 		CGPROGRAM
 		#pragma surface surf Lambert vertex:vert nofog keepalpha

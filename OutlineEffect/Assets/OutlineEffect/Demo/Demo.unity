@@ -282,8 +282,8 @@ MonoBehaviour:
   lineColor0: {r: 1, g: 0.76551723, b: 0, a: 1}
   lineColor1: {r: 0.7372549, g: 0.35686275, b: 0.7254902, a: 0.7411765}
   lineColor2: {r: 0, g: 0.5882353, b: 1, a: 1}
-  backfaceCulling: 1
   additiveRendering: 0
+  backfaceCulling: 0
   cornerOutlines: 0
   addLinesBetweenColors: 0
   scaleWithScreenSize: 1
