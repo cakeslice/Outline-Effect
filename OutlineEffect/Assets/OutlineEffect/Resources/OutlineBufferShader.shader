@@ -79,6 +79,7 @@ Shader "Hidden/OutlineBufferEffect" {
 
 			o.Albedo = _Color * alpha;
 			o.Alpha = alpha;
+			o.Emission = o.Albedo;
 		}
 		ENDCG
 	}
