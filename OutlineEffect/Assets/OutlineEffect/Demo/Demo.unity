@@ -245,7 +245,7 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 0
-  m_HDR: 0
+  m_HDR: 1
   m_AllowMSAA: 1
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   lineColor1: {r: 0.7372549, g: 0.35686275, b: 0.7254902, a: 0.7411765}
   lineColor2: {r: 0, g: 0.5882353, b: 1, a: 1}
   additiveRendering: 0
-  backfaceCulling: 0
+  backfaceCulling: 1
   cornerOutlines: 0
   addLinesBetweenColors: 0
   scaleWithScreenSize: 1
@@ -809,6 +809,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
 --- !u!4 &964312039
 Transform:
   m_ObjectHideFlags: 0
