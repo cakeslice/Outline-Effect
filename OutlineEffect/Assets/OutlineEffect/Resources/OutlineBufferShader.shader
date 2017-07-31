@@ -31,23 +31,25 @@ Shader "Hidden/OutlineBufferEffect" {
 	}
 
 	SubShader
-	{
+	{ 
 		Tags
-		{ 
-			"Queue"="Transparent" 
-			"IgnoreProjector"="True" 
-			"RenderType"="Transparent" 
-			"PreviewType"="Plane"
-			"CanUseSpriteAtlas"="True"
+		{
+			"Queue" = "Transparent"
+			"IgnoreProjector" = "True"
+			"RenderType" = "Transparent"
+			"PreviewType" = "Plane"
+			"CanUseSpriteAtlas" = "True"
 		}
 
-		//Cull Off
-		Lighting Off
+		// Change this stuff in OutlineEffect.cs instead!
 		//ZWrite Off
 		//Blend One OneMinusSrcAlpha
-
+		Cull [_Culling]
+		Lighting Off
+			
 		CGPROGRAM
-		#pragma surface surf Lambert vertex:vert nofog keepalpha
+
+		#pragma surface surf Lambert vertex:vert nofog noshadow noambient nolightmap novertexlights noshadowmask nometa //keepalpha
 		#pragma multi_compile _ PIXELSNAP_ON
 
 		sampler2D _MainTex;
@@ -57,22 +59,22 @@ Shader "Hidden/OutlineBufferEffect" {
 		struct Input
 		{
 			float2 uv_MainTex;
-			fixed4 color;
+			//fixed4 color;
 		};
-		
-		void vert (inout appdata_full v, out Input o)
+
+		void vert(inout appdata_full v, out Input o)
 		{
 			#if defined(PIXELSNAP_ON)
-			v.vertex = UnityPixelSnap (v.vertex);
+			v.vertex = UnityPixelSnap(v.vertex);
 			#endif
-			
+
 			UNITY_INITIALIZE_OUTPUT(Input, o);
-			o.color = v.color;
+			//o.color = v.color;
 		}
 
-		void surf (Input IN, inout SurfaceOutput o)
+		void surf(Input IN, inout SurfaceOutput o)
 		{
-			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * IN.color;
+			fixed4 c = tex2D(_MainTex, IN.uv_MainTex);// * IN.color;
 			if (c.a < _OutlineAlphaCutoff) discard;
 
 			float alpha = c.a * 99999999;
@@ -81,8 +83,9 @@ Shader "Hidden/OutlineBufferEffect" {
 			o.Alpha = alpha;
 			o.Emission = o.Albedo;
 		}
-		ENDCG
+
+		ENDCG		
 	}
 
-Fallback "Transparent/VertexLit"
+	Fallback "Transparent/VertexLit"
 }

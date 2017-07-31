@@ -49,7 +49,7 @@ namespace cakeslice
         }
         private OutlineEffect() { }
 
-		private readonly LinkedSet<Outline> outlines = new LinkedSet<Outline>();
+        private readonly LinkedSet<Outline> outlines = new LinkedSet<Outline>();
 
         [Range(1.0f, 6.0f)]
         public float lineThickness = 1.25f;
@@ -64,7 +64,6 @@ namespace cakeslice
 
         public bool additiveRendering = false;
 
-        private bool previousBackfaceCulling = true;
         public bool backfaceCulling = true;
 
         [Header("These settings can affect performance!")]
@@ -76,7 +75,6 @@ namespace cakeslice
         [Range(0.1f, .9f)]
         public float alphaCutoff = .5f;
         public bool flipY = false;
-        Camera previousSourceCamera;
         public Camera sourceCamera;
 
         [HideInInspector]
@@ -137,7 +135,6 @@ namespace cakeslice
                 if(sourceCamera == null)
                     sourceCamera = Camera.main;
             }
-            previousSourceCamera = sourceCamera;
 
             if(outlineCamera == null)
             {
@@ -154,23 +151,6 @@ namespace cakeslice
 
         public void OnPreRender()
         {
-            if(previousBackfaceCulling != backfaceCulling)
-            {
-                if(backfaceCulling)
-                    outlineBufferShader = Resources.Load<Shader>("OutlineBufferShader");
-                else
-                    outlineBufferShader = Resources.Load<Shader>("OutlineBufferCullOffShader");
-                DestroyImmediate(outlineEraseMaterial);
-                DestroyImmediate(outline1Material);
-                DestroyImmediate(outline2Material);
-                DestroyImmediate(outline3Material);
-                outlineEraseMaterial = null;
-                outline1Material = null;
-                outline2Material = null;
-                outline3Material = null;
-            }
-            previousBackfaceCulling = backfaceCulling;
-
             CreateMaterialsIfNeeded();
 
             if(commandBuffer != null)
@@ -231,7 +211,7 @@ namespace cakeslice
                                         m = new Material(GetMaterialFromID(outline.color));
                                     m.mainTexture = outline.Renderer.sharedMaterials[v].mainTexture;
                                     materialBuffer.Add(m);
-                                }                     
+                                }
                             }
                             else
                             {
@@ -241,6 +221,10 @@ namespace cakeslice
                                     m = GetMaterialFromID(outline.color);
                             }
 
+                            if(backfaceCulling)
+                                m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Back);
+                            else
+                                m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Off);
                             commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m);
                         }
                     }
@@ -273,11 +257,11 @@ namespace cakeslice
                 extraRenderTexture.Release();
             DestroyMaterials();
         }
-        
+
         void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
             outlineShaderMaterial.SetTexture("_OutlineSource", renderTexture);
- 
+
             if(addLinesBetweenColors)
             {
                 Graphics.Blit(source, extraRenderTexture, outlineShaderMaterial, 0);
@@ -285,17 +269,14 @@ namespace cakeslice
             }
             Graphics.Blit(source, destination, outlineShaderMaterial, 1);
         }
-        
+
         private void CreateMaterialsIfNeeded()
         {
             if(outlineShader == null)
                 outlineShader = Resources.Load<Shader>("OutlineShader");
             if(outlineBufferShader == null)
             {
-                if(backfaceCulling)
-                    outlineBufferShader = Resources.Load<Shader>("OutlineBufferShader");
-                else
-                    outlineBufferShader = Resources.Load<Shader>("OutlineBufferCullOffShader");
+                outlineBufferShader = Resources.Load<Shader>("OutlineBufferShader");
             }
             if(outlineShaderMaterial == null)
             {
@@ -391,7 +372,7 @@ namespace cakeslice
         public void AddOutline(Outline outline)
         {
             if(!outlines.Contains(outline))
-			    outlines.Add(outline);
+                outlines.Add(outline);
         }
 
         public void RemoveOutline(Outline outline)

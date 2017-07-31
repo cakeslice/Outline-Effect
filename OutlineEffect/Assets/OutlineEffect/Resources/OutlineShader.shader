@@ -249,5 +249,6 @@ Shader "Hidden/OutlineEffect"
 			ENDCG
 		}
 	} 
+
 	FallBack "Diffuse"
 }
