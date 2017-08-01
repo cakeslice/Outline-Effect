@@ -82,8 +82,8 @@ Shader "Hidden/OutlineEffect"
 					uv.y = 1 - uv.y;
 				#endif
 
-				//half4 originalPixel = tex2D(_MainTex,input.uv);
-				half4 outlineSource = tex2D(_OutlineSource, uv);
+				//half4 originalPixel = tex2D(_MainTex,input.uv, UnityStereoScreenSpaceUVAdjust(input.uv, _MainTex_ST));
+				half4 outlineSource = tex2D(_OutlineSource, UnityStereoScreenSpaceUVAdjust(uv, _MainTex_ST));
 
 				const float h = .95f;
 
