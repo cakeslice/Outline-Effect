@@ -384,6 +384,7 @@ namespace cakeslice
             outlineCamera.cullingMask = 0;
             outlineCamera.targetTexture = renderTexture;
             outlineCamera.enabled = false;
+            outlineCamera.allowHDR = false;
         }
 
         public void AddOutline(Outline outline)
