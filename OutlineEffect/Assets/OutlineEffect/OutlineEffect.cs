@@ -31,7 +31,6 @@ namespace cakeslice
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Camera))]
-    [ImageEffectAllowedInSceneView]
     [ExecuteInEditMode]
     public class OutlineEffect : MonoBehaviour
     {
@@ -148,24 +147,17 @@ namespace cakeslice
             renderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
             extraRenderTexture = new RenderTexture(sourceCamera.pixelWidth, sourceCamera.pixelHeight, 16, RenderTextureFormat.Default);
             UpdateOutlineCameraFromSource();
+
+            commandBuffer = new CommandBuffer();
+            outlineCamera.AddCommandBuffer(CameraEvent.BeforeImageEffects, commandBuffer);
         }
 
         public void OnPreRender()
         {
+            if(commandBuffer == null)
+                return;
+
             CreateMaterialsIfNeeded();
-
-            if(commandBuffer != null)
-            {
-                outlineCamera.RemoveCommandBuffer(CameraEvent.BeforeImageEffects, commandBuffer);
-                commandBuffer.Dispose();
-            }
-
-#if UNITY_EDITOR               
-            if(UnityEditor.SceneView.currentDrawingSceneView != null)
-                sourceCamera = UnityEditor.SceneView.currentDrawingSceneView.camera;
-            else
-                sourceCamera = GetComponent<Camera>();
-#endif
 
             if(renderTexture == null || renderTexture.width != sourceCamera.pixelWidth || renderTexture.height != sourceCamera.pixelHeight)
             {
@@ -176,9 +168,9 @@ namespace cakeslice
             UpdateMaterialsPublicProperties();
             UpdateOutlineCameraFromSource();
             outlineCamera.targetTexture = renderTexture;
-            commandBuffer = new CommandBuffer();
             commandBuffer.SetRenderTarget(renderTexture);
 
+            commandBuffer.Clear();
             if(outlines != null)
             {
                 foreach(Outline outline in outlines)
@@ -226,13 +218,19 @@ namespace cakeslice
                                 m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Back);
                             else
                                 m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Off);
-                            commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m);
+
+                            commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, 0, 0);
+                            MeshFilter mL = outline.GetComponent<MeshFilter>();
+                            if(mL)
+                            {
+                                for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
+                                    commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
+                            }
                         }
                     }
                 }
             }
 
-            outlineCamera.AddCommandBuffer(CameraEvent.BeforeImageEffects, commandBuffer);
             outlineCamera.Render();
         }
 
@@ -249,9 +247,6 @@ namespace cakeslice
 
         void OnDestroy()
         {
-            if(sourceCamera != null && commandBuffer != null)
-                sourceCamera.RemoveCommandBuffer(CameraEvent.BeforeImageEffects, commandBuffer);
-
             if(renderTexture != null)
                 renderTexture.Release();
             if(extraRenderTexture != null)
@@ -384,7 +379,11 @@ namespace cakeslice
             outlineCamera.cullingMask = 0;
             outlineCamera.targetTexture = renderTexture;
             outlineCamera.enabled = false;
+#if UNITY_5_6_OR_NEWER
             outlineCamera.allowHDR = false;
+#else
+            outlineCamera.hdr = false;
+#endif
         }
 
         public void AddOutline(Outline outline)
