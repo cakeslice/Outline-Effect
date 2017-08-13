@@ -226,6 +226,12 @@ namespace cakeslice
                                 for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
                                     commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
                             }
+                            SkinnedMeshRenderer sMR = outline.GetComponent<SkinnedMeshRenderer>();
+                            if(sMR)
+                            {
+                                for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
+                                    commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
+                            }
                         }
                     }
                 }
