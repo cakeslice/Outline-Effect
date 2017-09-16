@@ -37,11 +37,6 @@ namespace cakeslice
         public int color;
         public bool eraseRenderer;
 
-        [HideInInspector]
-        public int originalLayer;
-        [HideInInspector]
-        public Material[] originalMaterials;
-
         private void Awake()
         {
             Renderer = GetComponent<Renderer>();

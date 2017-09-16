@@ -177,7 +177,7 @@ namespace cakeslice
                 {
                     LayerMask l = sourceCamera.cullingMask;
 
-                    if(outline != null && l == (l | (1 << outline.originalLayer)))
+                    if(outline != null && l == (l | (1 << outline.gameObject.layer)))
                     {
                         for(int v = 0; v < outline.Renderer.sharedMaterials.Length; v++)
                         {
@@ -223,14 +223,20 @@ namespace cakeslice
                             MeshFilter mL = outline.GetComponent<MeshFilter>();
                             if(mL)
                             {
-                                for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
-                                    commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
+                                if(mL.sharedMesh != null)
+                                {
+                                    for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
+                                        commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
+                                }
                             }
                             SkinnedMeshRenderer sMR = outline.GetComponent<SkinnedMeshRenderer>();
                             if(sMR)
                             {
-                                for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
-                                    commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
+                                if(sMR.sharedMesh != null)
+                                {
+                                    for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
+                                        commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
+                                }
                             }
                         }
                     }
