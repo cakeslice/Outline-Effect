@@ -179,64 +179,41 @@ namespace cakeslice
 
                     if(outline != null && l == (l | (1 << outline.gameObject.layer)))
                     {
-                        for(int v = 0; v < outline.Renderer.sharedMaterials.Length; v++)
-                        {
-                            Material m = null;
+                        foreach(var Renderer in outline.Renderers) {
+                            for (int v = 0; v < Renderer.sharedMaterials.Length; v++) {
+                                Material m = null;
 
-                            if(outline.Renderer.sharedMaterials[v].mainTexture != null && outline.Renderer.sharedMaterials[v])
-                            {
-                                foreach(Material g in materialBuffer)
-                                {
-                                    if(g.mainTexture == outline.Renderer.sharedMaterials[v].mainTexture)
-                                    {
-                                        if(outline.eraseRenderer && g.color == outlineEraseMaterial.color)
-                                            m = g;
-                                        else if(g.color == GetMaterialFromID(outline.color).color)
-                                            m = g;
+                                if (Renderer.sharedMaterials[v].mainTexture != null && Renderer.sharedMaterials[v]) {
+                                    foreach (Material g in materialBuffer) {
+                                        if (g.mainTexture == Renderer.sharedMaterials[v].mainTexture) {
+                                            if (outline.eraseRenderer && g.color == outlineEraseMaterial.color)
+                                                m = g;
+                                            else if (g.color == GetMaterialFromID(outline.color).color)
+                                                m = g;
+                                        }
                                     }
-                                }
 
-                                if(m == null)
-                                {
-                                    if(outline.eraseRenderer)
-                                        m = new Material(outlineEraseMaterial);
+                                    if (m == null) {
+                                        if (outline.eraseRenderer)
+                                            m = new Material(outlineEraseMaterial);
+                                        else
+                                            m = new Material(GetMaterialFromID(outline.color));
+                                        m.mainTexture = Renderer.sharedMaterials[v].mainTexture;
+                                        materialBuffer.Add(m);
+                                    }
+                                } else {
+                                    if (outline.eraseRenderer)
+                                        m = outlineEraseMaterial;
                                     else
-                                        m = new Material(GetMaterialFromID(outline.color));
-                                    m.mainTexture = outline.Renderer.sharedMaterials[v].mainTexture;
-                                    materialBuffer.Add(m);
+                                        m = GetMaterialFromID(outline.color);
                                 }
-                            }
-                            else
-                            {
-                                if(outline.eraseRenderer)
-                                    m = outlineEraseMaterial;
+
+                                if (backfaceCulling)
+                                    m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Back);
                                 else
-                                    m = GetMaterialFromID(outline.color);
-                            }
+                                    m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Off);
 
-                            if(backfaceCulling)
-                                m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Back);
-                            else
-                                m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Off);
-
-                            commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, 0, 0);
-                            MeshFilter mL = outline.GetComponent<MeshFilter>();
-                            if(mL)
-                            {
-                                if(mL.sharedMesh != null)
-                                {
-                                    for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
-                                        commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
-                                }
-                            }
-                            SkinnedMeshRenderer sMR = outline.GetComponent<SkinnedMeshRenderer>();
-                            if(sMR)
-                            {
-                                if(sMR.sharedMesh != null)
-                                {
-                                    for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
-                                        commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
-                                }
+                                commandBuffer.DrawRenderer(Renderer, m, 0, 0);
                             }
                         }
                     }
