@@ -2,17 +2,17 @@
 //  Copyright (c) 2015 José Guerreiro. All rights reserved.
 //
 //  MIT license, see http://www.opensource.org/licenses/mit-license.php
-//  
+//
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in
 //  all copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -177,7 +177,7 @@ namespace cakeslice
                 {
                     LayerMask l = sourceCamera.cullingMask;
 
-                    if(outline != null && l == (l | (1 << outline.gameObject.layer)))
+                    if(outline != null && l == (l | (1 << outline.originalLayer)))
                     {
                         for(int v = 0; v < outline.Renderer.sharedMaterials.Length; v++)
                         {
@@ -219,24 +219,18 @@ namespace cakeslice
                             else
                                 m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Off);
 
-                            commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, 0, 0);
-                            MeshFilter mL = outline.GetComponent<MeshFilter>();
+                            commandBuffer.DrawRenderer(outline.Renderer, m, 0, 0);
+                            MeshFilter mL = outline.MeshFilter;
                             if(mL)
                             {
-                                if(mL.sharedMesh != null)
-                                {
-                                    for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
-                                        commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
-                                }
+                                for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
+                                    commandBuffer.DrawRenderer(outline.Renderer, m, i, 0);
                             }
-                            SkinnedMeshRenderer sMR = outline.GetComponent<SkinnedMeshRenderer>();
+                            SkinnedMeshRenderer sMR = outline.SkinnedMeshRenderer;
                             if(sMR)
                             {
-                                if(sMR.sharedMesh != null)
-                                {
-                                    for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
-                                        commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
-                                }
+                                for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
+                                    commandBuffer.DrawRenderer(outline.Renderer, m, i, 0);
                             }
                         }
                     }
@@ -335,10 +329,10 @@ namespace cakeslice
                 // If scaling is too small (height less than 360 pixels), make sure you still render the outlines, but render them with 1 thickness
                 if(scaleWithScreenSize && scalingFactor < 1)
                 {
-                    if(VRSettings.isDeviceActive && sourceCamera.stereoTargetEye != StereoTargetEyeMask.None)
+                    if(UnityEngine.XR.XRSettings.isDeviceActive && sourceCamera.stereoTargetEye != StereoTargetEyeMask.None)
                     {
-                        outlineShaderMaterial.SetFloat("_LineThicknessX", (1 / 1000.0f) * (1.0f / VRSettings.eyeTextureWidth) * 1000.0f);
-                        outlineShaderMaterial.SetFloat("_LineThicknessY", (1 / 1000.0f) * (1.0f / VRSettings.eyeTextureHeight) * 1000.0f);
+                        outlineShaderMaterial.SetFloat("_LineThicknessX", (1 / 1000.0f) * (1.0f / UnityEngine.XR.XRSettings.eyeTextureWidth) * 1000.0f);
+                        outlineShaderMaterial.SetFloat("_LineThicknessY", (1 / 1000.0f) * (1.0f / UnityEngine.XR.XRSettings.eyeTextureHeight) * 1000.0f);
                     }
                     else
                     {
@@ -348,10 +342,10 @@ namespace cakeslice
                 }
                 else
                 {
-                    if(VRSettings.isDeviceActive && sourceCamera.stereoTargetEye != StereoTargetEyeMask.None)
+                    if(UnityEngine.XR.XRSettings.isDeviceActive && sourceCamera.stereoTargetEye != StereoTargetEyeMask.None)
                     {
-                        outlineShaderMaterial.SetFloat("_LineThicknessX", scalingFactor * (lineThickness / 1000.0f) * (1.0f / VRSettings.eyeTextureWidth) * 1000.0f);
-                        outlineShaderMaterial.SetFloat("_LineThicknessY", scalingFactor * (lineThickness / 1000.0f) * (1.0f / VRSettings.eyeTextureHeight) * 1000.0f);
+                        outlineShaderMaterial.SetFloat("_LineThicknessX", scalingFactor * (lineThickness / 1000.0f) * (1.0f / UnityEngine.XR.XRSettings.eyeTextureWidth) * 1000.0f);
+                        outlineShaderMaterial.SetFloat("_LineThicknessY", scalingFactor * (lineThickness / 1000.0f) * (1.0f / UnityEngine.XR.XRSettings.eyeTextureHeight) * 1000.0f);
                     }
                     else
                     {
