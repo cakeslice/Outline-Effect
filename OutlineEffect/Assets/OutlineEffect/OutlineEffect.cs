@@ -177,7 +177,7 @@ namespace cakeslice
                 {
                     LayerMask l = sourceCamera.cullingMask;
 
-                    if(outline != null && l == (l | (1 << outline.originalLayer)))
+                    if(outline != null && l == (l | (1 << outline.gameObject.layer)))
                     {
                         for(int v = 0; v < outline.Renderer.sharedMaterials.Length; v++)
                         {
@@ -223,14 +223,20 @@ namespace cakeslice
                             MeshFilter mL = outline.MeshFilter;
                             if(mL)
                             {
-                                for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
-                                    commandBuffer.DrawRenderer(outline.Renderer, m, i, 0);
+                                if(mL.sharedMesh != null)
+                                {
+                                    for(int i = 1; i < mL.sharedMesh.subMeshCount; i++)
+                                        commandBuffer.DrawRenderer(outline.Renderer(), m, i, 0);
+                                }
                             }
                             SkinnedMeshRenderer sMR = outline.SkinnedMeshRenderer;
                             if(sMR)
                             {
-                                for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
-                                    commandBuffer.DrawRenderer(outline.Renderer, m, i, 0);
+                                if(sMR.sharedMesh != null)
+                                {
+                                    for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
+                                        commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
+                                }
                             }
                         }
                     }
@@ -329,10 +335,10 @@ namespace cakeslice
                 // If scaling is too small (height less than 360 pixels), make sure you still render the outlines, but render them with 1 thickness
                 if(scaleWithScreenSize && scalingFactor < 1)
                 {
-                    if(UnityEngine.XR.XRSettings.isDeviceActive && sourceCamera.stereoTargetEye != StereoTargetEyeMask.None)
+                    if(VRSettings.isDeviceActive && sourceCamera.stereoTargetEye != StereoTargetEyeMask.None)
                     {
-                        outlineShaderMaterial.SetFloat("_LineThicknessX", (1 / 1000.0f) * (1.0f / UnityEngine.XR.XRSettings.eyeTextureWidth) * 1000.0f);
-                        outlineShaderMaterial.SetFloat("_LineThicknessY", (1 / 1000.0f) * (1.0f / UnityEngine.XR.XRSettings.eyeTextureHeight) * 1000.0f);
+                        outlineShaderMaterial.SetFloat("_LineThicknessX", (1 / 1000.0f) * (1.0f / VRSettings.eyeTextureWidth) * 1000.0f);
+                        outlineShaderMaterial.SetFloat("_LineThicknessY", (1 / 1000.0f) * (1.0f / VRSettings.eyeTextureHeight) * 1000.0f);
                     }
                     else
                     {
@@ -342,10 +348,10 @@ namespace cakeslice
                 }
                 else
                 {
-                    if(UnityEngine.XR.XRSettings.isDeviceActive && sourceCamera.stereoTargetEye != StereoTargetEyeMask.None)
+                    if(VRSettings.isDeviceActive && sourceCamera.stereoTargetEye != StereoTargetEyeMask.None)
                     {
-                        outlineShaderMaterial.SetFloat("_LineThicknessX", scalingFactor * (lineThickness / 1000.0f) * (1.0f / UnityEngine.XR.XRSettings.eyeTextureWidth) * 1000.0f);
-                        outlineShaderMaterial.SetFloat("_LineThicknessY", scalingFactor * (lineThickness / 1000.0f) * (1.0f / UnityEngine.XR.XRSettings.eyeTextureHeight) * 1000.0f);
+                        outlineShaderMaterial.SetFloat("_LineThicknessX", scalingFactor * (lineThickness / 1000.0f) * (1.0f / VRSettings.eyeTextureWidth) * 1000.0f);
+                        outlineShaderMaterial.SetFloat("_LineThicknessY", scalingFactor * (lineThickness / 1000.0f) * (1.0f / VRSettings.eyeTextureHeight) * 1000.0f);
                     }
                     else
                     {
