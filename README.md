@@ -4,12 +4,12 @@ This is a fork of [Outline Effect](https://github.com/cakeslice/Outline-Effect) 
 
 IMPROVEMENTS:
 ------------
-* added a checkbox to the Outline Effect component to disable the automatic enabling of all scene Outlines at startup. ([thank you](https://github.com/cakeslice/Outline-Effect/pull/30) Claytonious)
-* use fewer GetComponent calls in OutlineEffect.OnPreRender ([thank you](https://github.com/cakeslice/Outline-Effect/pull/38) hobnob)
-* only allow there to be one Outline Effect camera in a scene
+* added a checkbox to the OutlineEffect component to disable the automatic enabling of all scene Outlines at startup. ([thank you](https://github.com/cakeslice/Outline-Effect/pull/30) Claytonious)
+* don't use GetComponent calls in OutlineEffect.OnPreRender ([thank you](https://github.com/cakeslice/Outline-Effect/pull/38) hobnob)
+* only allow there to be one OutlineEffect camera
 * enabling and disabling Outline components is much faster and produces much less garbage
 * OutlineEffect.OnPreRender produces much less garbage
-* OutlineEffect.OnPreRender returns immediately if there are no active outlines in the scene
+* OutlineEffect.OnPreRender returns immediately if there are no active Outlines in the scene
 * added ability to install project via the Unity Package Manager
 * reorganized project folder structure to something nicer
 * various code improvements
@@ -24,8 +24,5 @@ Download the files and place them anywhere in the Assets folder of your Unity pr
 
 USAGE:
 ------------
-Add "Outline Effect" component to camera
-
-Add "Outline" component to renderers
-
-https://forum.unity3d.com/threads/free-open-source-outline-image-effect.314362)
+* Add "Outline Effect" component to camera
+* Add "Outline" component to renderers
