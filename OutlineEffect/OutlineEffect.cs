@@ -251,7 +251,7 @@ namespace cakeslice
                                 if(sMR.sharedMesh != null)
                                 {
                                     for(int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
-                                        commandBuffer.DrawRenderer(outline.GetComponent<Renderer>(), m, i, 0);
+                                        commandBuffer.DrawRenderer(outline.Renderer, m, i, 0);
                                 }
                             }
                         }
