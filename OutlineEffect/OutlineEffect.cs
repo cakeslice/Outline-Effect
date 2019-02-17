@@ -35,7 +35,6 @@ namespace cakeslice
     public class OutlineEffect : MonoBehaviour
     {
         public static OutlineEffect Instance { get; private set; }
-        private OutlineEffect() { }
 
         private readonly LinkedSet<Outline> outlines = new LinkedSet<Outline>();
 
@@ -164,6 +163,8 @@ namespace cakeslice
             if(commandBuffer == null)
                 return;
 
+            // the first frame during which there are no outlines, we still need to render 
+            // to clear out any outlines that were being rendered on the previous frame
             if (outlines.Count == 0)
             {
                 if (!RenderTheNextFrame)
