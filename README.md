@@ -1,3 +1,7 @@
+This fork aims to improve performance.
+
+---
+
 Outline Effect
 ======================
 Outline Image Effect for Unity
