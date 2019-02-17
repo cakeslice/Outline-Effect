@@ -34,17 +34,7 @@ namespace cakeslice
     [ExecuteInEditMode]
     public class OutlineEffect : MonoBehaviour
     {
-        private static OutlineEffect m_instance;
-        public static OutlineEffect Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                    throw new System.NullReferenceException("looks like there isn't an outline camera in the scene - please add the OutlineEfffect component to your main camera to use outlines");
-
-                return m_instance;
-            }
-        }
+        public static OutlineEffect Instance { get; private set; }
         private OutlineEffect() { }
 
         private readonly LinkedSet<Outline> outlines = new LinkedSet<Outline>();
@@ -119,13 +109,13 @@ namespace cakeslice
 
         private void Awake()
         {
-            if (m_instance != null)
+            if (Instance != null)
             {
                 Destroy(this);
                 throw new System.Exception("you can only have one outline camera in the scene");
             }
 
-            m_instance = this;
+            Instance = this;
         }
 
         void Start()

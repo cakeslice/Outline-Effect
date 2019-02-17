@@ -28,7 +28,6 @@ using System.Collections.Generic;
 
 namespace cakeslice
 {
-    [ExecuteInEditMode]
     [RequireComponent(typeof(Renderer))]
     public class Outline : MonoBehaviour
     {
@@ -48,14 +47,12 @@ namespace cakeslice
 
         void OnEnable()
         {
-            if (Application.isPlaying)
-                OutlineEffect.Instance.AddOutline(this);
+            OutlineEffect.Instance?.AddOutline(this);
         }
 
         void OnDisable()
         {
-            if (Application.isPlaying)
-                OutlineEffect.Instance.RemoveOutline(this);
+            OutlineEffect.Instance?.RemoveOutline(this);
         }
 
         private Material[] _SharedMaterials;
