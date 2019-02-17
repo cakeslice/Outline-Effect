@@ -57,5 +57,17 @@ namespace cakeslice
             if (Application.isPlaying)
                 OutlineEffect.Instance.RemoveOutline(this);
         }
+
+        private Material[] _SharedMaterials;
+        public Material[] SharedMaterials
+        {
+            get
+            {
+                if (_SharedMaterials == null)
+                    _SharedMaterials = Renderer.sharedMaterials;
+
+                return _SharedMaterials;
+            }
+        }
     }
 }

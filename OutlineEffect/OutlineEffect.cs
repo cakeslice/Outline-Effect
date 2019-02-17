@@ -195,15 +195,15 @@ namespace cakeslice
 
                     if(outline != null && l == (l | (1 << outline.gameObject.layer)))
                     {
-                        for(int v = 0; v < outline.Renderer.sharedMaterials.Length; v++)
+                        for(int v = 0; v < outline.SharedMaterials.Length; v++)
                         {
                             Material m = null;
-
-                            if(outline.Renderer.sharedMaterials[v].mainTexture != null && outline.Renderer.sharedMaterials[v])
+                            
+                            if(outline.SharedMaterials[v].mainTexture != null && outline.SharedMaterials[v])
                             {
                                 foreach(Material g in materialBuffer)
                                 {
-                                    if(g.mainTexture == outline.Renderer.sharedMaterials[v].mainTexture)
+                                    if(g.mainTexture == outline.SharedMaterials[v].mainTexture)
                                     {
                                         if(outline.eraseRenderer && g.color == outlineEraseMaterial.color)
                                             m = g;
@@ -218,7 +218,7 @@ namespace cakeslice
                                         m = new Material(outlineEraseMaterial);
                                     else
                                         m = new Material(GetMaterialFromID(outline.color));
-                                    m.mainTexture = outline.Renderer.sharedMaterials[v].mainTexture;
+                                    m.mainTexture = outline.SharedMaterials[v].mainTexture;
                                     materialBuffer.Add(m);
                                 }
                             }
