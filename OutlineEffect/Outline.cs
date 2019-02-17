@@ -48,12 +48,14 @@ namespace cakeslice
 
         void OnEnable()
         {
-            OutlineEffect.Instance.AddOutline(this);
+            if (Application.isPlaying)
+                OutlineEffect.Instance.AddOutline(this);
         }
 
         void OnDisable()
         {
-            OutlineEffect.Instance.RemoveOutline(this);
+            if (Application.isPlaying)
+                OutlineEffect.Instance.RemoveOutline(this);
         }
     }
 }
