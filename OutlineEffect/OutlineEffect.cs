@@ -39,10 +39,8 @@ namespace cakeslice
         {
             get
             {
-                if(Equals(m_instance, null))
-                {
-                    return m_instance = FindObjectOfType(typeof(OutlineEffect)) as OutlineEffect;
-                }
+                if (m_instance == null)
+                    throw new System.NullReferenceException("looks like there isn't an outline camera in the scene - please add the OutlineEfffect component to your main camera to use outlines");
 
                 return m_instance;
             }
@@ -121,6 +119,12 @@ namespace cakeslice
 
         private void Awake()
         {
+            if (m_instance != null)
+            {
+                Destroy(this);
+                throw new System.Exception("you can only have one outline camera in the scene");
+            }
+
             m_instance = this;
         }
 
