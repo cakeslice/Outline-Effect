@@ -43,8 +43,9 @@ namespace cakeslice
         {
             LinkedListNode<T> node;
 
-            if (dictionary.TryGetValue(t, out node) && dictionary.Remove(t))
+            if (dictionary.TryGetValue(t, out node))
             {
+                dictionary.Remove(t);
                 list.Remove(node);
                 return true;
             }
@@ -62,6 +63,9 @@ namespace cakeslice
 
         public bool Contains(T t)
             => dictionary.ContainsKey(t);
+
+        public int Count
+            => list.Count;
 
         public IEnumerator<T> GetEnumerator()
 			=> list.GetEnumerator();
