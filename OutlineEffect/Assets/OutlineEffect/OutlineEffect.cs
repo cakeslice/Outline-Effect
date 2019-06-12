@@ -183,7 +183,9 @@ namespace cakeslice
                         {
                             Material m = null;
 
-                            if (outline.Renderer.sharedMaterials[v].mainTexture != null && outline.Renderer.sharedMaterials[v])
+                            if (outline.Renderer.sharedMaterials[v].HasProperty("_MainTex")
+                                && outline.Renderer.sharedMaterials[v].mainTexture != null
+                                && outline.Renderer.sharedMaterials[v])
                             {
                                 foreach (Material g in materialBuffer)
                                 {
