@@ -25,7 +25,7 @@ INSTALLATION:
 Download the files and place them anywhere in the Assets folder of your Unity project. Alternatively, you can install it via the Unity Package Manager:
 
 1. open the file `Your Unity Project/Packages/manifest.json`
-1. add the following line to the `"dependencies"` array: `"com.jimmycushnie.outline-effect-but-its-faster": "https://github.com/JimmyCushnie/Outline-Effect-but-its-faster.git#unity-package-manager"`
+1. add the following line to the `"dependencies"` array: `"com.cakeslice.outline-effect": "https://github.com/cakeslice/Outline-Effect.git"`
 1. open Unity and let it download the package
 
 USAGE:
