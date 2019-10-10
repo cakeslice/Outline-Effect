@@ -1,9 +1,9 @@
 {
-  "name": "com.jimmycushnie.outline-effect-but-its-faster",
-  "displayName": "Outline Effect But It's Faster",
+  "name": "com.cakeslice.outline-effect-but-its-faster",
+  "displayName": "Outline Effect",
   "version": "0.0.1",
   "unity": "2018.3",
-  "description": "A fork of Outline Effect by cakeslice with improved performance.",
+  "description": "Outline Image Effect for Unity",
   "keywords": [ "outline", "highlight" ],
   "category": "penis lmao",
   "dependencies": {
