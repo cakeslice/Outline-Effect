@@ -1,28 +1,41 @@
-Outline Effect But It's Faster
+Outline Effect
 ======================
-This is a fork of [Outline Effect](https://github.com/cakeslice/Outline-Effect) by cakeslice. The primary aim of this fork is to improve performance, but I am also adding a few features and cleaning up code.
+Outline Image Effect for Unity
 
-IMPROVEMENTS:
+![](http://i.imgur.com/CuUDPyk.jpg "Outline Image Effect for Unity")
+
+FEATURES:
 ------------
-* added a checkbox to the OutlineEffect component to disable the automatic enabling of all scene Outlines at startup. ([thank you](https://github.com/cakeslice/Outline-Effect/pull/30) Claytonious)
-* don't use GetComponent calls in OutlineEffect.OnPreRender ([thank you](https://github.com/cakeslice/Outline-Effect/pull/38) hobnob)
-* only allow there to be one OutlineEffect camera
-* enabling and disabling Outline components is much faster and produces much less garbage
-* OutlineEffect.OnPreRender produces much less garbage
-* OutlineEffect.OnPreRender returns immediately if there are no active Outlines in the scene
-* added ability to install project via the Unity Package Manager
-* reorganized project folder structure to something nicer
-* various code improvements
+Sprite/Line/Mesh renderer support
+
+HDR support (useful for bloom, etc...)
+
+Alpha cutout option
+
+Additive outline rendering option
+
+Merged outline between renderers (or you can add outlines between different colors)
+
+Erase option to keep outlines behind specific renderers
+
+Per renderer color support (up to three different colors)
 
 INSTALLATION:
 ------------
 Download the files and place them anywhere in the Assets folder of your Unity project. Alternatively, you can install it via the Unity Package Manager:
 
 1. open the file `Your Unity Project/Packages/manifest.json`
-2. add the following line to the `"dependencies"` array: `"com.jimmycushnie.outline-effect-but-its-faster": "https://github.com/JimmyCushnie/Outline-Effect-but-its-faster.git#unity-package-manager"`
-3. open Unity and let it download the package
+1. add the following line to the `"dependencies"` array: `"com.jimmycushnie.outline-effect-but-its-faster": "https://github.com/JimmyCushnie/Outline-Effect-but-its-faster.git#unity-package-manager"`
+1. open Unity and let it download the package
 
 USAGE:
 ------------
-* Add "Outline Effect" component to camera
-* Add "Outline" component to renderers
+Add "Outline Effect" component to camera
+
+Add "Outline" component to renderers
+
+SUPPORT:
+------------
+[Twitter @cakeslice_dev](https://twitter.com/cakeslice_dev)
+
+[Unity Forum Thread](https://forum.unity3d.com/threads/free-open-source-outline-image-effect.314362)
