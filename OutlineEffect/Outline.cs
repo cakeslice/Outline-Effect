@@ -28,11 +28,12 @@ using System.Collections.Generic;
 
 namespace cakeslice
 {
-    [ExecuteInEditMode]
     [RequireComponent(typeof(Renderer))]
     public class Outline : MonoBehaviour
     {
         public Renderer Renderer { get; private set; }
+        public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
+        public MeshFilter MeshFilter { get; private set; }
 
         public int color;
         public bool eraseRenderer;
@@ -40,29 +41,29 @@ namespace cakeslice
         private void Awake()
         {
             Renderer = GetComponent<Renderer>();
+            SkinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
+            MeshFilter = GetComponent<MeshFilter>();
         }
 
         void OnEnable()
         {
-			IEnumerable<OutlineEffect> effects = Camera.allCameras.AsEnumerable()
-				.Select(c => c.GetComponent<OutlineEffect>())
-				.Where(e => e != null);
-
-			foreach (OutlineEffect effect in effects)
-            {
-                effect.AddOutline(this);
-            }
+            OutlineEffect.Instance?.AddOutline(this);
         }
 
         void OnDisable()
         {
-			IEnumerable<OutlineEffect> effects = Camera.allCameras.AsEnumerable()
-				.Select(c => c.GetComponent<OutlineEffect>())
-				.Where(e => e != null);
+            OutlineEffect.Instance?.RemoveOutline(this);
+        }
 
-			foreach (OutlineEffect effect in effects)
+        private Material[] _SharedMaterials;
+        public Material[] SharedMaterials
+        {
+            get
             {
-                effect.RemoveOutline(this);
+                if (_SharedMaterials == null)
+                    _SharedMaterials = Renderer.sharedMaterials;
+
+                return _SharedMaterials;
             }
         }
     }

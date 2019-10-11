@@ -1,0 +1,13 @@
+{
+  "name": "com.cakeslice.outline-effect",
+  "displayName": "Outline Effect",
+  "version": "0.0.1",
+  "unity": "2018.3",
+  "description": "Outline Image Effect for Unity",
+  "keywords": [
+    "outline",
+    "highlight"
+  ],
+  "category": "effect",
+  "dependencies": {}
+}
