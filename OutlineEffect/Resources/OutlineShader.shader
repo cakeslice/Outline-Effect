@@ -144,6 +144,7 @@ Shader "Hidden/OutlineEffect"
 			half4 _LineColor1;
 			half4 _LineColor2;
 			half4 _LineColor3;
+			half4 _LineColor4;
 			int _FlipY;
 			int _Dark;
 			float _FillAmount;
@@ -207,6 +208,14 @@ Shader "Hidden/OutlineEffect"
 							originalPixel *= 1 - _LineColor3.a;
 						hasOutline = true;
 					}
+					else if (sample1.a > h || sample2.a > h || sample3.a > h || sample4.a > h ||
+						sample5.a > h || sample6.a > h || sample7.a > h || sample8.a > h)
+					{
+						outline = _LineColor4 * _LineIntensity * _LineColor4.a;
+						if (outsideDark)
+							originalPixel *= 1 - _LineColor4.a;
+						hasOutline = true;
+					}
 
 					if (!outside)
 						outline *= _FillAmount;
@@ -232,6 +241,13 @@ Shader "Hidden/OutlineEffect"
 						outline = _LineColor3 * _LineIntensity * _LineColor3.a;
 						if (outsideDark)
 							originalPixel *= 1 - _LineColor3.a;
+						hasOutline = true;
+					}
+					else if (sample1.a > h || sample2.a > h || sample3.a > h || sample4.a > h)
+					{
+						outline = _LineColor4 * _LineIntensity * _LineColor4.a;
+						if (outsideDark)
+							originalPixel *= 1 - _LineColor4.a;
 						hasOutline = true;
 					}
 
