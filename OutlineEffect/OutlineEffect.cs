@@ -31,9 +31,16 @@ namespace cakeslice
 {
 	[DisallowMultipleComponent]
 	[RequireComponent(typeof(Camera))]
-	[ExecuteInEditMode]
+	/* [ExecuteInEditMode] */
 	public class OutlineEffect : MonoBehaviour
 	{
+		/* #if UNITY_EDITOR
+				  private void OnValidate()
+				  {
+						CreateMaterialsIfNeeded();
+				  }
+		#endif */
+
 		public static OutlineEffect Instance { get; private set; }
 
 		private readonly LinkedSet<Outline> outlines = new LinkedSet<Outline>();

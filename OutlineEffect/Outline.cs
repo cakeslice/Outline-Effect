@@ -29,6 +29,7 @@ using System.Collections.Generic;
 namespace cakeslice
 {
 	[RequireComponent(typeof(Renderer))]
+	/* [ExecuteInEditMode] */
 	public class Outline : MonoBehaviour
 	{
 		public Renderer Renderer { get; private set; }
