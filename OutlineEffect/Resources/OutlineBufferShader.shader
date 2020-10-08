@@ -41,9 +41,6 @@ Shader "Hidden/OutlineBufferEffect" {
 			"CanUseSpriteAtlas" = "True"
 		}
 
-		// Change this stuff in OutlineEffect.cs instead!
-		//ZWrite Off
-		//Blend One OneMinusSrcAlpha
 		Cull [_Culling]
 		Lighting Off
 			
