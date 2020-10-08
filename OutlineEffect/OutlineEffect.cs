@@ -66,7 +66,7 @@ namespace cakeslice
 		public float alphaCutoff = .5f;
 		public bool flipY = false;
 		public Camera sourceCamera;
-		public bool autoEnableOutlines = true;
+		public bool autoEnableOutlines = false;
 
 		[HideInInspector]
 		public Camera outlineCamera;
@@ -275,14 +275,21 @@ namespace cakeslice
 
 		private void OnEnable()
 		{
+			Outline[] o = FindObjectsOfType<Outline>();
 			if (autoEnableOutlines)
 			{
-				Outline[] o = FindObjectsOfType<Outline>();
-
 				foreach (Outline oL in o)
 				{
 					oL.enabled = false;
 					oL.enabled = true;
+				}
+			}
+			else
+			{
+				foreach (Outline oL in o)
+				{
+					if (!outlines.Contains(oL))
+						outlines.Add(oL);
 				}
 			}
 		}
