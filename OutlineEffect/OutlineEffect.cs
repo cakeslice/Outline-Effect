@@ -296,6 +296,7 @@ namespace cakeslice
 			DestroyMaterials();
 		}
 
+		[ImageEffectOpaque]
 		void OnRenderImage(RenderTexture source, RenderTexture destination)
 		{
 			if (outlineShaderMaterial != null)
