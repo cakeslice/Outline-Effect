@@ -53,6 +53,9 @@ namespace cakeslice
 
 		public bool backfaceCulling = true;
 
+		public Color fillColor = Color.blue;
+		public bool useFillColor = false;
+
 		[Header("These settings can affect performance!")]
 		public bool cornerOutlines = false;
 		public bool addLinesBetweenColors = false;
@@ -391,6 +394,8 @@ namespace cakeslice
 				}
 				outlineShaderMaterial.SetFloat("_LineIntensity", lineIntensity);
 				outlineShaderMaterial.SetFloat("_FillAmount", fillAmount);
+				outlineShaderMaterial.SetColor("_FillColor", fillColor);
+				outlineShaderMaterial.SetFloat("_UseFillColor", useFillColor ? 1 : 0);
 				outlineShaderMaterial.SetColor("_LineColor1", lineColor0 * lineColor0);
 				outlineShaderMaterial.SetColor("_LineColor2", lineColor1 * lineColor1);
 				outlineShaderMaterial.SetColor("_LineColor3", lineColor2 * lineColor2);
