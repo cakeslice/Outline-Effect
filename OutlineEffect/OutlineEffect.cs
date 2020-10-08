@@ -247,24 +247,28 @@ namespace cakeslice
 						else
 							m.SetInt("_Culling", (int)UnityEngine.Rendering.CullMode.Off);
 
-						commandBuffer.DrawRenderer(outline.Renderer, m, 0, 0);
 						MeshFilter mL = outline.MeshFilter;
+						SkinnedMeshRenderer sMR = outline.SkinnedMeshRenderer;
+						SpriteRenderer sR = outline.SpriteRenderer;
 						if (mL)
 						{
 							if (mL.sharedMesh != null)
 							{
-								for (int i = 1; i < mL.sharedMesh.subMeshCount; i++)
-									commandBuffer.DrawRenderer(outline.Renderer, m, i, 0);
+								if (v < mL.sharedMesh.subMeshCount)
+									commandBuffer.DrawRenderer(outline.Renderer, m, v, 0);
 							}
 						}
-						SkinnedMeshRenderer sMR = outline.SkinnedMeshRenderer;
-						if (sMR)
+						else if (sMR)
 						{
 							if (sMR.sharedMesh != null)
 							{
-								for (int i = 1; i < sMR.sharedMesh.subMeshCount; i++)
-									commandBuffer.DrawRenderer(outline.Renderer, m, i, 0);
+								if (v < sMR.sharedMesh.subMeshCount)
+									commandBuffer.DrawRenderer(outline.Renderer, m, v, 0);
 							}
+						}
+						else if (sR)
+						{
+							commandBuffer.DrawRenderer(outline.Renderer, m, v, 0);
 						}
 					}
 				}
