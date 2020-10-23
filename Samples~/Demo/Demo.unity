@@ -44,7 +44,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000003, guid: 1d0bb13b0e722f34ab18724947292304,
+  m_LightingDataAsset: {fileID: 112000000, guid: 1da08c94ffc0e3442a92bbdcd4410595,
     type: 2}
   m_UseShadowmask: 0
 --- !u!196 &5
@@ -323,13 +323,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineThickness: 1
   lineIntensity: 1.2
-  fillAmount: 0.108
+  fillAmount: 1
   lineColor0: {r: 1, g: 0.76551723, b: 0, a: 1}
   lineColor1: {r: 0.7372549, g: 0.35686275, b: 0.7254902, a: 0.7411765}
-  lineColor2: {r: 0, g: 0.5882353, b: 1, a: 1}
-  lineColor3: {r: 0, g: 1, b: 1, a: 1}
+  lineColor2: {r: 0, g: 0.8691118, b: 1, a: 1}
   additiveRendering: 0
   backfaceCulling: 1
+  fillTexture: {fileID: 2800000, guid: a9dce822781ae1c48b57c2c3a5782a30, type: 3}
+  fillTextureScale: {x: 4, y: 6.5}
+  useFillColor: 0
+  fillColor: {r: 0, g: 0.080596924, b: 1, a: 1}
   cornerOutlines: 0
   addLinesBetweenColors: 1
   scaleWithScreenSize: 1
