@@ -292,7 +292,7 @@ namespace cakeslice
 			{
 				foreach (Outline oL in o)
 				{
-					if (!outlines.Contains(oL))
+					if (oL.enabled && !outlines.Contains(oL))
 						outlines.Add(oL);
 				}
 			}
