@@ -8,7 +8,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Rendering;
-using UnityEngine.VR;
 
 namespace cakeslice
 {
