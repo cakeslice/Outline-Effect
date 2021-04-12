@@ -201,6 +201,9 @@ namespace cakeslice
 
 			foreach (Outline outline in outlines)
 			{
+				if (!outline.IsVisible)
+        			continue;
+
 				LayerMask l = sourceCamera.cullingMask;
 
 				if (outline != null && l == (l | (1 << outline.gameObject.layer)))

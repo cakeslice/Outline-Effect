@@ -41,6 +41,17 @@ namespace cakeslice
 			OutlineEffect.Instance?.RemoveOutline(this);
 		}
 
+		private bool visible;
+		private void OnBecameVisible()
+		{
+			visible = true;
+		}
+		private void OnBecameInvisible()
+		{
+			visible = false;
+		}
+		public bool IsVisible => visible;
+
 		private Material[] _SharedMaterials;
 		public Material[] SharedMaterials
 		{
