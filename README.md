@@ -22,7 +22,7 @@ Per renderer color support (up to three different colors)
 
 INSTALLATION:
 ------------
-Option #1 (Recommended): Use OpenUPM: https://openupm.com/packages/com.cakeslice.outline-effect/
+Option #1 (Recommended): Use [OpenUPM](https://openupm.com/packages/com.cakeslice.outline-effect/) or add the package using the Package Manager: `https://github.com/cakeslice/Outline-Effect.git` (Add from git URL)
 
 Option #2: Download from the Asset Store: https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/outline-effect-78608
 
